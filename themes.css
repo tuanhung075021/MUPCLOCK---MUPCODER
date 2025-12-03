@@ -1,0 +1,17 @@
+/* File: themes.css */
+.theme-tet {
+  background-color: #b30000 !important;
+  color: #ffeb3b !important;
+}
+.theme-summer {
+  background: linear-gradient(to right, #2980b9, #6dd5fa, #ffffff);
+  color: #333 !important;
+}
+.theme-autumn {
+  background-color: #d35400 !important;
+  color: white !important;
+}
+.theme-xmas {
+  background-color: #16a085 !important;
+  color: white !important;
+}

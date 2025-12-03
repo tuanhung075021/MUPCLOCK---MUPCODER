@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Clock - Công Cụ</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="kiemdangnhap.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">MUPCLOCK</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Trang chủ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="app.html">Công cụ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="shop.html">Cửa Hàng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="account.html">Tài khoản</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html">Liên hệ</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1>Chào mừng <span id="user-display">...</span>!</h1>
+      <p>Đây là nơi chứa các công cụ thời gian.</p>
+    </div>
+
+    <script>
+      document.getElementById("user-display").innerText =
+        localStorage.getItem("currentUser");
+    </script>
+    <script src="app.js"></script>
+  </body>
+</html>
