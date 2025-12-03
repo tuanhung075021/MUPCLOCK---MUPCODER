@@ -6,11 +6,12 @@ import {
   set,
   get,
   child,
-  update, // <-- Bổ sung hàm này
+  update, // <-- QUAN TRỌNG: Phải có chữ này ở đây
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-// 2. Cấu hình (Giữ nguyên của bạn)
+// 2. Cấu hình (Giữ nguyên code của bạn)
 const firebaseConfig = {
+  // ... (đoạn mã apiKey, databaseURL của bạn giữ nguyên) ...
   apiKey: "AIzaSyCm2az1msLlIbfh2RC7zBl8tbsCR92Ysnc",
   authDomain: "mupclock-mupcoder.firebaseapp.com",
   databaseURL: "https://mupclock-mupcoder-default-rtdb.firebaseio.com",
@@ -26,4 +27,4 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 // 4. Xuất khẩu (Thêm 'update' vào đây nữa)
-export { db, ref, set, get, child, update };
+export { db, ref, set, get, child, update }; // <-- QUAN TRỌNG: Phải có chữ này ở đây

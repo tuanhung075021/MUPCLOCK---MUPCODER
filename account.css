@@ -1,0 +1,43 @@
+/* --- CSS CHO TRANG TÀI KHOẢN --- */
+.avatar-container {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+}
+
+.avatar-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover; /* Giúp ảnh không bị méo */
+  border: 4px solid #fff;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.avatar-upload-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: #0d6efd; /* Màu xanh Bootstrap */
+  color: white;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 2px solid white;
+  transition: all 0.3s;
+}
+
+.avatar-upload-btn:hover {
+  background: #0b5ed7;
+  transform: scale(1.1);
+}
+
+/* Ẩn cái input file đi vì nó xấu */
+#file-input {
+  display: none;
+}
