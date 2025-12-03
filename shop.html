@@ -10,12 +10,36 @@
     />
     <link rel="stylesheet" href="themes.css" />
     <script src="kiemdangnhap.js"></script>
+
+    <style>
+      /* Chỉnh cho Tab đẹp hơn xíu */
+      .nav-tabs .nav-link {
+        color: #495057;
+        font-weight: bold;
+        padding: 15px 20px;
+      }
+      .nav-tabs .nav-link.active {
+        color: #0d6efd; /* Màu xanh Bootstrap */
+        border-bottom: 3px solid #0d6efd;
+      }
+      .tab-content {
+        padding: 30px 0;
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
       <div class="container">
         <a class="navbar-brand" href="index.html">⏱️ MUPCLOCK</a>
-        <div class="collapse navbar-collapse">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
               <a class="nav-link" href="index.html">Trang chủ</a>
@@ -41,24 +65,71 @@
       <div class="text-center mb-5">
         <h1>🛒 Cửa Hàng TimeMaster</h1>
         <p>Tùy biến phong cách của riêng bạn</p>
-        <div class="badge bg-warning text-dark fs-6">
-          Xu của bạn: <span id="user-coin">Loading...</span> 🪙
+        <div class="badge bg-warning text-dark fs-5 p-2">
+          Xu của bạn: <span id="user-coin">Đang tải...</span> 🪙
         </div>
       </div>
 
-      <h3 class="border-bottom pb-2 mb-4">🎨 Giao Diện (Themes)</h3>
-      <div class="row" id="theme-list">
-        <div class="text-center w-100">Đang tải dữ liệu...</div>
-      </div>
+      <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="theme-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#theme-tab-pane"
+            type="button"
+            role="tab"
+            aria-selected="true"
+          >
+            🎨 Kho Giao Diện
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="sound-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#sound-tab-pane"
+            type="button"
+            role="tab"
+            aria-selected="false"
+          >
+            🎵 Kho Âm Thanh
+          </button>
+        </li>
+      </ul>
 
-      <h3 class="border-bottom pb-2 mb-4 mt-5">🎵 Âm Thanh Báo Thức</h3>
-      <div class="row" id="sound-list"></div>
+      <div class="tab-content" id="myTabContent">
+        <div
+          class="tab-pane fade show active"
+          id="theme-tab-pane"
+          role="tabpanel"
+          aria-labelledby="theme-tab"
+        >
+          <div class="row" id="theme-list">
+            <div class="text-center w-100">Đang tải themes...</div>
+          </div>
+        </div>
+
+        <div
+          class="tab-pane fade"
+          id="sound-tab-pane"
+          role="tabpanel"
+          aria-labelledby="sound-tab"
+        >
+          <div class="row" id="sound-list">
+            <div class="text-center w-100">Đang tải sounds...</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <footer class="mt-5 py-3 text-center text-muted">
-      <small>&copy; 2024 TimeMaster Team</small>
+      <small>&copy; 2025 MUPCODER</small>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="shop.js"></script>
+    <script type="module" src="theme-manager.js"></script>
   </body>
 </html>

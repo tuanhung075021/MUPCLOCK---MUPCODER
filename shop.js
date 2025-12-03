@@ -1,3 +1,5 @@
+// 1. Thêm import ở đầu file
+import { applyTheme } from "./theme-manager.js";
 import { db, ref, set, get, child, update } from "./firebase-config.js";
 
 const currentUser = localStorage.getItem("currentUser");
@@ -170,8 +172,9 @@ function loadShopUI() {
   });
 }
 
-// 4. XỬ LÝ MUA VÀ ÁP DỤNG
+// 4. XỬ LÝ MUA VÀ ÁP DỤNG (Đã bổ sung phần Âm thanh)
 function addEventListeners() {
+  // --- PHẦN GIAO DIỆN (THEME) ---
   // Xử lý MUA Theme
   document.querySelectorAll(".btn-buy-theme").forEach((btn) => {
     btn.addEventListener("click", () =>
@@ -184,7 +187,18 @@ function addEventListeners() {
     btn.addEventListener("click", () => equipItem(btn.dataset.id, "theme"));
   });
 
-  // (Làm tương tự cho Sound...)
+  // --- PHẦN ÂM THANH (SOUND) - MỚI THÊM VÀO ---
+  // Xử lý MUA Sound
+  document.querySelectorAll(".btn-buy-sound").forEach((btn) => {
+    btn.addEventListener("click", () =>
+      buyItem(btn.dataset.id, parseInt(btn.dataset.price), "sound")
+    );
+  });
+
+  // Xử lý ÁP DỤNG Sound
+  document.querySelectorAll(".btn-equip-sound").forEach((btn) => {
+    btn.addEventListener("click", () => equipItem(btn.dataset.id, "sound"));
+  });
 }
 
 function buyItem(itemId, price, type) {
@@ -211,16 +225,22 @@ function buyItem(itemId, price, type) {
   });
 }
 
+// 2. Sửa hàm equipItem
 function equipItem(itemId, type) {
   const userRef = ref(db, "users/" + currentUser);
   const updates = {};
-  updates["/settings/" + type] = itemId; // settings/theme hoặc settings/sound
+  updates["/settings/" + type] = itemId;
 
   update(userRef, updates).then(() => {
     alert("Đã áp dụng thành công!");
+
+    // CẬP NHẬT NGAY LẬP TỨC
+    if (type === "theme") {
+      localStorage.setItem("currentTheme", itemId); // Lưu tạm để các trang khác biết
+      applyTheme(itemId); // Đổi màu ngay tại chỗ
+    }
+
     loadShopUI();
-    // Nếu là theme, đổi màu ngay lập tức để test
-    // (Phần đổi màu thật sự sẽ nằm ở file chung để áp dụng cho mọi trang)
   });
 }
 

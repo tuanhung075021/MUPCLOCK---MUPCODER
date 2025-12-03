@@ -8,6 +8,7 @@
       rel="stylesheet"
     />
     <script src="kiemdangnhap.js"></script>
+    <link rel="stylesheet" href="themes.css" />
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
@@ -39,11 +40,14 @@
       <h1>Chào mừng <span id="user-display">...</span>!</h1>
       <p>Đây là nơi chứa các công cụ thời gian.</p>
     </div>
-
+    <footer class="mt-5 py-3 text-center text-muted">
+      <small>&copy; 2025 MUPCODER</small>
+    </footer>
     <script>
       document.getElementById("user-display").innerText =
         localStorage.getItem("currentUser");
     </script>
     <script src="app.js"></script>
+    <script type="module" src="theme-manager.js"></script>
   </body>
 </html>
