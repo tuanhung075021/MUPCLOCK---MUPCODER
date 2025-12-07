@@ -100,57 +100,121 @@ body.theme-default .btn-primary {
 }
 
 /* --- 1. THEME TẾT (Đỏ - Vàng) --- */
-body.theme-tet {
-  background: #fcf4e4 !important;
-  color: #89251b !important;
+body.theme-summer {
+  background: linear-gradient(#3b8ac4, #efdbcb) !important;
+  color: #254a8e;
+  --card: #3b8bc469 !important;
+  --glass: #3b8bc4b7 !important;
+  --rubik-wait: #ff0055; /* Màu khi  đang giữ (Đỏ ) */
+  --rubik-ready: #00ff00; /* Màu khi sẵn sàng (Xanh) */
+  --rubik-idle: #3b8ac4;
+}
+body.theme-summer .btn-primary {
+  background: #3b8bc4b7;
+  color: #f2f2f2;
+  border: none;
+}
+body.theme-summer .btn-primary:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 15px var(--accent-color);
 }
 
-body.theme-tet .navbar {
-  background-color: #a8261a !important;
-  border-bottom: 2px solid #fa8d40;
+body.theme-summer .btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-color);
+  border: 1px solid var(--glass-border);
+}
+body.theme-summer .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+body.theme-summer .btn-danger {
+  background: #3b8bc469;
+  color: white;
+  border: none;
+}
+body.theme-summer .btn-danger:hover {
+  background: #5182be;
+}
+body.theme-summer header h1 {
+  color: #1f3e77;
+  font-weight: 700;
+}
+body.theme-summer .unit-number {
+  color: #264c93;
+}
+body.theme-summer .navbar {
+  background-color: #254a8e !important;
+  border-bottom: 2px solid #efdbcb;
 }
 
 /* Tab (Kho Giao diện / Âm thanh) */
-body.theme-tet .nav-tabs .nav-link {
-  color: #228620 !important;
-  border-color: #6fbb51;
+body.theme-summer .nav-tabs .nav-link {
+  color: #fcefe4 !important;
+  border-color: #fcefe4;
 }
-body.theme-tet .nav-tabs .nav-link.active {
-  background-color: #6fbb50 !important;
+body.theme-summer .nav-tabs .nav-link.active {
+  background-color: #345da7 !important;
   color: #ffffff !important;
-  border-color: #6fbb50;
+  border-color: #345da7;
 }
 
 /* Card sản phẩm */
-body.theme-tet .card {
+body.theme-summer .card {
   background-color: #fff5f5 !important;
-  border: 1px solid #fa8d40 !important;
+  border: 1px solid #efdbcb !important;
 }
 .theme-preview-img {
   height: 100px;
   object-fit: cover; /* Đảm bảo ảnh phủ kín khung mà không bị méo */
   border-bottom: 1px solid #eee; /* Đường viền nhẹ ngăn cách ảnh và tên */
 }
-body.theme-tet .btn-secondary:disabled {
-  background-color: #6fbb50 !important;
-  border-color: #6fbb50 !important;
+body.theme-summer .btn-secondary:disabled {
+  background-color: #3b8bc469 !important;
+  border-color: #3b8ac4 !important;
   color: white !important;
   opacity: 1;
   cursor: default;
 }
-/* Nút bấm chính */
-body.theme-tet .btn-primary {
-  background-color: #a8261a !important;
-  border-color: #fa8d40 !important;
+body.theme-summer .btn-outline-danger {
+  border-color: #3b8ac4 !important;
+  color: #254a8e !important;
+  opacity: 1;
+  cursor: default;
 }
-body.theme-tet {
-  /* Đổi màu chữ và Kim Giờ/Phút thành Vàng */
-  --text: #ffffff;
-  /* Đổi màu Kim Giây thành Xanh lá (hoặc Trắng) cho nổi trên nền Đỏ */
-  --accent: #fa8d40;
-  /* Đổi màu nền Card đồng hồ cho hợp tông Tết */
-  --card: #a8261a99;
-  --glass: #6ebb5084; /* Màu nền mặt đồng hồ */
+body.theme-summer .btn-outline-danger:hover {
+  background-color: #3b8bc4b7 !important;
+  border-color: #3b8ac4 !important;
+  color: #254a8e !important;
+  opacity: 1;
+  cursor: default;
+}
+/* Nút bấm chính */
+body.theme-summer .btn-primary {
+  background-color: #3b8ac4 !important;
+  border-color: #4bb4de !important;
+}
+
+body.theme-summer .timer-container {
+  text-align: center;
+  background: #64a8da69;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+body.theme-summer .display {
+  color: #254a8e; /* Dùng biến màu */
+}
+body.theme-summer .btn-start {
+  background-color: #3b8ac4; /* Màu accent */
+  color: #fff5f5;
+}
+body.theme-summer .btn-pause {
+  background-color: #fff5f5;
+  color: #254a8e;
+}
+body.theme-summer .btn-reset {
+  background-color: #254a8e;
 }
 
 /* --- 2. THEME MÙA HẠ (Xanh Biển - Trắng) --- */

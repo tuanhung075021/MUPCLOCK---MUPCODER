@@ -1,0 +1,52 @@
+body.theme-tet {
+  background: #fcf4e4 !important;
+  color: #89251b !important;
+}
+
+body.theme-tet .navbar {
+  background-color: #a8261a !important;
+  border-bottom: 2px solid #fa8d40;
+}
+
+/* Tab (Kho Giao diện / Âm thanh) */
+body.theme-tet .nav-tabs .nav-link {
+  color: #228620 !important;
+  border-color: #6fbb51;
+}
+body.theme-tet .nav-tabs .nav-link.active {
+  background-color: #6fbb50 !important;
+  color: #ffffff !important;
+  border-color: #6fbb50;
+}
+
+/* Card sản phẩm */
+body.theme-tet .card {
+  background-color: #fff5f5 !important;
+  border: 1px solid #fa8d40 !important;
+}
+.theme-preview-img {
+  height: 100px;
+  object-fit: cover; /* Đảm bảo ảnh phủ kín khung mà không bị méo */
+  border-bottom: 1px solid #eee; /* Đường viền nhẹ ngăn cách ảnh và tên */
+}
+body.theme-tet .btn-secondary:disabled {
+  background-color: #6fbb50 !important;
+  border-color: #6fbb50 !important;
+  color: white !important;
+  opacity: 1;
+  cursor: default;
+}
+/* Nút bấm chính */
+body.theme-tet .btn-primary {
+  background-color: #a8261a !important;
+  border-color: #fa8d40 !important;
+}
+body.theme-tet {
+  /* Đổi màu chữ và Kim Giờ/Phút thành Vàng */
+  --text: #ffffff;
+  /* Đổi màu Kim Giây thành Xanh lá (hoặc Trắng) cho nổi trên nền Đỏ */
+  --accent: #fa8d40;
+  /* Đổi màu nền Card đồng hồ cho hợp tông Tết */
+  --card: #a8261a99;
+  --glass: #6ebb5084; /* Màu nền mặt đồng hồ */
+}
