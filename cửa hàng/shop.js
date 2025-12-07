@@ -236,7 +236,7 @@ function buyItem(itemId, price, type) {
         });
       }
     } else {
-      alert("Bạn không đủ tiền! Hãy nạp thêm (hoặc xin admin Hưng).");
+      alert("Bạn không đủ xu! Truy cập trang Liên hệ để nạp thêm.");
     }
   });
 }

@@ -14,24 +14,41 @@ body {
   --card: rgba(255, 255, 255, 0.05); /* Nền kính mờ */
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-}
-body {
+  --rubik-text: #e6eef8; /* Màu số bình thường */
+  --rubik-wait: #ff0055; /* Màu khi đang giữ (Đỏ) */
+  --rubik-ready: #00ff00; /* Màu khi sẵn sàng (Xanh) */
+  --rubik-idle: #e6eef8;
   --reactor-primary: #00f7ff; /* Màu chính (Glow sáng) */
   --reactor-secondary: #6a00ff; /* Màu phụ (Glow tối) */
   --reactor-accent: #00ffd1; /* Màu nhấn (Hạt năng lượng) */
   --reactor-danger: #ff0055; /* Màu cảnh báo */
   --reactor-bg: #000000; /* Màu nền */
+  --btn-primary-text: #000000; /* Màu chữ trên nút chính */
+
+  --btn-secondary-bg: rgba(255, 255, 255, 0.1);
+  --btn-secondary-hover: rgba(255, 255, 255, 0.2);
+  --btn-secondary-border: rgba(255, 255, 255, 0.1);
+
+  --btn-danger-bg: #ff4757;
+  --btn-danger-hover: #ff6b81;
+  --btn-danger-text: #ffffff;
 }
-body {
-  --rubik-text: #e6eef8; /* Màu số bình thường */
-  --rubik-wait: #ff0055; /* Màu khi đang giữ (Đỏ) */
-  --rubik-ready: #00ff00; /* Màu khi sẵn sàng (Xanh) */
-  --rubik-bg-grad: linear-gradient(180deg, #071127 0%, #071334 100%);
-}
+
 /* --- 1. THEME Light Mode --- */
 body.theme-default {
   background: #fafafa !important;
   color: #484b6a !important;
+
+  --rubik-text: #000000 !important; /* Màu số bình thường */
+  --rubik-wait: #ff0055; /* Màu khi  đang giữ (Đỏ ) */
+  --rubik-ready: #00ff00; /* Màu khi sẵn sàng (Xanh) */
+  --bg-gradient: linear-gradient(180deg, #682323 0%, #340707 100%) !important;
+  --rubik-idle: #3b8ac4;
+  /* Đổi màu chữ và Kim Giờ/Phút thành Vàng */
+  --text: #ffffff;
+  /* Đổi màu nền Card đồng hồ cho hợp tông Tết */
+  --card: #484b6ac6;
+  --glass: #9394a5; /* Màu nền mặt đồng hồ */
 }
 
 body.theme-default .navbar {
@@ -80,13 +97,6 @@ body.theme-default .btn-outline-danger:hover {
 body.theme-default .btn-primary {
   background-color: #9394a5 !important;
   border-color: #9394a5 !important;
-}
-body.theme-default {
-  /* Đổi màu chữ và Kim Giờ/Phút thành Vàng */
-  --text: #ffffff;
-  /* Đổi màu nền Card đồng hồ cho hợp tông Tết */
-  --card: #484b6ac6;
-  --glass: #9394a5; /* Màu nền mặt đồng hồ */
 }
 
 /* --- 1. THEME TẾT (Đỏ - Vàng) --- */
@@ -145,10 +155,48 @@ body.theme-tet {
 
 /* --- 2. THEME MÙA HẠ (Xanh Biển - Trắng) --- */
 body.theme-summer {
-  background: linear-gradient(#3b8ac4, #efdbcb);
-  color: #fcefe4;
+  background: linear-gradient(#3b8ac4, #efdbcb) !important;
+  color: #254a8e;
+  --card: #3b8bc469 !important;
+  --glass: #3b8bc4b7 !important;
+  --rubik-wait: #ff0055; /* Màu khi  đang giữ (Đỏ ) */
+  --rubik-ready: #00ff00; /* Màu khi sẵn sàng (Xanh) */
+  --rubik-idle: #3b8ac4;
+}
+body.theme-summer .btn-primary {
+  background: #3b8bc4b7;
+  color: #f2f2f2;
+  border: none;
+}
+body.theme-summer .btn-primary:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 15px var(--accent-color);
 }
 
+body.theme-summer .btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-color);
+  border: 1px solid var(--glass-border);
+}
+body.theme-summer .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+body.theme-summer .btn-danger {
+  background: #3b8bc469;
+  color: white;
+  border: none;
+}
+body.theme-summer .btn-danger:hover {
+  background: #5182be;
+}
+body.theme-summer header h1 {
+  color: #1f3e77;
+  font-weight: 700;
+}
+body.theme-summer .unit-number {
+  color: #264c93;
+}
 body.theme-summer .navbar {
   background-color: #254a8e !important;
   border-bottom: 2px solid #efdbcb;
@@ -200,12 +248,7 @@ body.theme-summer .btn-primary {
   background-color: #3b8ac4 !important;
   border-color: #4bb4de !important;
 }
-body.theme-summer {
-  --text: #ffffff !important;
 
-  --card: #254a8e91 !important;
-  --glass: #3b8bc4b7 !important;
-}
 body.theme-summer .timer-container {
   text-align: center;
   background: #64a8da69;
