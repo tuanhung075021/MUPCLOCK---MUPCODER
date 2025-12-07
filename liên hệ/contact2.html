@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liên hệ & Hỗ trợ - MUPCLOCK</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    
+    <script src="../kiemdangnhap.js"></script>
+    <link rel="stylesheet" href="../themes.css" />
+
+    <style>
+      /* --- GLOBAL STYLE THEO MUPCLOCK --- */
+      :root {
+        --glass-bg: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        --accent-color: #38bdf8;
+        --text-color: #e6eef8;
+      }
+
+      body {
+        background-color: #0f1724; /* Fallback màu nền tối */
+        color: var(--text-color);
+        font-family: "Inter", sans-serif;
+        padding-top: 80px; /* Chừa chỗ cho Navbar */
+        min-height: 100vh;
+      }
+
+      h1, h2, h3, .price-amount {
+        font-family: "Orbitron", sans-serif;
+      }
+
+      /* --- COMPONENTS --- */
+      
+      /* Glass Card (Dùng chung cho các khối) */
+      .glass-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--glass-shadow);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 24px;
+        height: 100%;
+        transition: transform 0.2s;
+      }
+      .glass-card:hover {
+        border-color: var(--accent-color);
+      }
+
+      /* Accordion (FAQ & Guide) - Custom lại cho Dark Mode */
+      .accordion-item {
+        background: transparent;
+        border: 1px solid var(--glass-border);
+        margin-bottom: 10px;
+        border-radius: 8px !important;
+        overflow: hidden;
+      }
+      .accordion-button {
+        background: rgba(255,255,255,0.03);
+        color: var(--text-color);
+        font-weight: 600;
+      }
+      .accordion-button:not(.collapsed) {
+        background: rgba(56, 189, 248, 0.2); /* Accent color mờ */
+        color: var(--text-color);
+        box-shadow: none;
+      }
+      .accordion-body {
+        background: rgba(0,0,0,0.2);
+        color: #b0c4de;
+        font-size: 0.95rem;
+      }
+
+      /* Pricing Card */
+      .pricing-card {
+        text-align: center;
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+      }
+      .pricing-card.popular {
+        border-color: var(--accent-color);
+      }
+      .badge-popular {
+        position: absolute;
+        top: 0;
+        right: 0;
+background: var(--accent-color);
+        color: #000;
+        font-size: 0.7rem;
+        padding: 4px 8px;
+        border-bottom-left-radius: 8px;
+        font-weight: bold;
+      }
+      .coin-icon {
+        font-size: 2.5rem;
+        color: #ffd700;
+        margin-bottom: 10px;
+        text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+      }
+      .price-amount {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      /* Form Style */
+      .form-control, .form-select {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--glass-border);
+        color: var(--text-color);
+      }
+      .form-control:focus, .form-select:focus {
+        background: rgba(0, 0, 0, 0.5);
+        color: var(--text-color);
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 0.25rem rgba(56, 189, 248, 0.25);
+      }
+      
+      /* Navigation Tabs Custom */
+      .nav-pills .nav-link {
+        color: var(--text-color);
+        background: rgba(255,255,255,0.05);
+        margin-right: 10px;
+        border: 1px solid var(--glass-border);
+      }
+      .nav-pills .nav-link.active {
+        background: var(--accent-color);
+        color: #000;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html"><b>MUPCLOCK</b></a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">Trang chủ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../công cụ/app.html">Công cụ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../cửa hàng/shop.html">Cửa Hàng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../tài khoản/account.html">Tài khoản</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Liên hệ</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container pb-5">
+      
+      <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Trung tâm hỗ trợ</h1>
+        <p class="lead opacity-75">Chúng tôi có thể giúp gì cho bạn hôm nay?</p>
+      </div>
+
+      <ul class="nav nav-pills mb-4 justify-content-center" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+<button class="nav-link active" id="pills-guide-tab" data-bs-toggle="pill" data-bs-target="#pills-guide" type="button" role="tab"><i class="fas fa-book me-2"></i>Hướng Dẫn</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-service-tab" data-bs-toggle="pill" data-bs-target="#pills-service" type="button" role="tab"><i class="fas fa-coins me-2"></i>Dịch Vụ & Nạp Xu</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab"><i class="fas fa-headset me-2"></i>CSKH & Báo Lỗi</button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="pills-tabContent">
+        
+        <div class="tab-pane fade show active" id="pills-guide" role="tabpanel">
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <div class="glass-card">
+                <h3 class="mb-4 text-info"><i class="fas fa-tools"></i> Sử dụng Công cụ</h3>
+                <div class="accordion" id="accordionTools">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                        Làm sao để dùng Rubik Timer?
+                      </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionTools">
+                      <div class="accordion-body">
+                        Để sử dụng Bấm giờ Rubik: <br>
+                        1. Nhấn giữ phím <b>SPACE</b> (hoặc giữ màn hình trên điện thoại) cho đến khi số chuyển màu xanh lá.<br>
+                        2. Thả tay ra để bắt đầu tính giờ.<br>
+                        3. Nhấn phím bất kỳ để dừng lại.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                        Cách thêm đồng hồ thế giới?
+                      </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionTools">
+                      <div class="accordion-body">
+                        Truy cập menu <b>Công cụ > Giờ thế giới</b>. Tại ô chọn thành phố, chọn khu vực bạn muốn và nhấn nút "Thêm đồng hồ".
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+<div class="glass-card">
+                <h3 class="mb-4 text-warning"><i class="fas fa-shopping-cart"></i> Cửa hàng & Xu</h3>
+                <div class="accordion" id="accordionShop">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#shopOne">
+                        Làm sao để có Xu?
+                      </button>
+                    </h2>
+                    <div id="shopOne" class="accordion-collapse collapse" data-bs-parent="#accordionShop">
+                      <div class="accordion-body">
+                        Xu dùng để mua Theme và Âm thanh. Bạn có thể nhận xu bằng cách:<br>
+                        - Đăng ký tài khoản mới (Tặng 1000 xu).<br>
+                        - Điểm danh hàng ngày.<br>
+                        - Nạp qua thẻ cào hoặc chuyển khoản (Xem tab Dịch vụ).
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#shopTwo">
+                        Theme mua rồi có bị mất không?
+                      </button>
+                    </h2>
+                    <div id="shopTwo" class="accordion-collapse collapse" data-bs-parent="#accordionShop">
+                      <div class="accordion-body">
+                        Không. Theme và Âm thanh bạn đã mua sẽ được lưu vĩnh viễn vào tài khoản của bạn.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="pills-service" role="tabpanel">
+            <div class="row mb-4">
+                <div class="col-12 text-center">
+                    <div class="glass-card d-inline-block px-5">
+                        <h4>Tỷ giá quy đổi hiện tại</h4>
+                        <p class="mb-0 text-success fw-bold fs-5">1.000 VNĐ = 100 XU</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-4">
+                    <div class="glass-card pricing-card">
+                        <h5>Gói Tiết Kiệm</h5>
+                        <div class="coin-icon"><i class="fas fa-coins"></i></div>
+                        <div class="price-amount text-accent">10.000đ</div>
+                        <p>Nhận ngay <b>1.000 Xu</b></p>
+                        <hr class="border-secondary">
+                        <ul class="list-unstyled text-start small opacity-75">
+<li><i class="fas fa-check text-success"></i> Đủ mua 2 Theme sự kiện</li>
+                            <li><i class="fas fa-check text-success"></i> Hỗ trợ Momo / Banking</li>
+                        </ul>
+                        <button class="btn btn-outline-light w-100 mt-3" onclick="showPayment('Gói 10k')">Chọn gói này</button>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="glass-card pricing-card popular">
+                        <div class="badge-popular">HOT</div>
+                        <h5>Gói Dân Chơi</h5>
+                        <div class="coin-icon"><i class="fas fa-sack-dollar"></i></div>
+                        <div class="price-amount text-warning">50.000đ</div>
+                        <p>Nhận ngay <b>5.500 Xu</b></p>
+                        <p class="small text-success">(Tặng thêm 10%)</p>
+                        <hr class="border-secondary">
+                        <ul class="list-unstyled text-start small opacity-75">
+                            <li><i class="fas fa-check text-success"></i> Mua sắm thoải mái</li>
+                            <li><i class="fas fa-check text-success"></i> Tặng huy hiệu VIP</li>
+                        </ul>
+                        <button class="btn btn-primary w-100 mt-3" onclick="showPayment('Gói 50k')">Chọn gói này</button>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="glass-card pricing-card">
+                        <h5>Gói Đại Gia</h5>
+                        <div class="coin-icon"><i class="fas fa-gem"></i></div>
+                        <div class="price-amount text-info">100.000đ</div>
+                        <p>Nhận ngay <b>12.000 Xu</b></p>
+                        <p class="small text-success">(Tặng thêm 20%)</p>
+                        <hr class="border-secondary">
+                         <button class="btn btn-outline-light w-100 mt-3" onclick="showPayment('Gói 100k')">Chọn gói này</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="payment-area" class="mt-4 glass-card d-none text-center">
+                <h4 class="text-warning">Thông tin chuyển khoản</h4>
+                <p>Nội dung chuyển khoản: <b>MUPCLOCK [Tên_TK] [Gói]</b></p>
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-4">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=ExampleBankTransfer" alt="QR Code" class="img-fluid rounded border">
+                        <p class="small mt-2">Quét mã QR (Demo)</p>
+                    </div>
+                    <div class="col-md-6 text-start">
+                        <p><b>Ngân hàng:</b> MB Bank</p>
+<p><b>Số tài khoản:</b> 999999999</p>
+                        <p><b>Chủ tài khoản:</b> NGUYEN VAN A</p>
+                        <div class="alert alert-info py-2 small">
+                            <i class="fas fa-info-circle"></i> Sau khi chuyển khoản, vui lòng chụp màn hình và gửi vào mục "CSKH" để được cộng xu nhanh nhất.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="pills-contact" role="tabpanel">
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="glass-card">
+                <h3 class="mb-4"><i class="fas fa-paper-plane"></i> Gửi yêu cầu hỗ trợ</h3>
+                <form id="contactForm" onsubmit="handleFormSubmit(event)">
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Tên của bạn</label>
+                      <input type="text" class="form-control" id="contactName" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Email liên hệ</label>
+                      <input type="email" class="form-control" id="contactEmail" required>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Vấn đề cần hỗ trợ</label>
+                    <select class="form-select" id="contactTopic">
+                      <option value="bug">Báo lỗi kỹ thuật (Web lag, không chạy...)</option>
+                      <option value="deposit">Vấn đề nạp Xu (Chưa nhận được xu...)</option>
+                      <option value="feedback">Góp ý cải thiện</option>
+                      <option value="other">Khác</option>
+                    </select>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Chi tiết</label>
+                    <textarea class="form-control" rows="5" placeholder="Mô tả chi tiết vấn đề hoặc gửi mã giao dịch tại đây..." required></textarea>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Đính kèm ảnh (nếu có)</label>
+                    <input type="file" class="form-control">
+                  </div>
+
+                  <button type="submit" class="btn btn-primary px-4"><i class="fas fa-paper-plane me-2"></i>Gửi yêu cầu</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="col-lg-4 mt-4 mt-lg-0">
+              <div class="glass-card bg-danger bg-opacity-10" style="border-color: rgba(220, 53, 69, 0.3);">
+                <h5 class="text-danger mb-3"><i class="fas fa-bug"></i> Các lỗi thường gặp</h5>
+<div class="accordion accordion-flush" id="accordionErrors">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#err1">
+                                Không nghe thấy tiếng chuông?
+                            </button>
+                        </h2>
+                        <div id="err1" class="accordion-collapse collapse" data-bs-parent="#accordionErrors">
+                            <div class="accordion-body text-light">
+                                Trình duyệt thường chặn âm thanh tự động. Hãy thử click chuột vào trang web một lần trước khi bắt đầu đếm giờ.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#err2">
+                                Theme không đổi sau khi mua?
+                            </button>
+                        </h2>
+                        <div id="err2" class="accordion-collapse collapse" data-bs-parent="#accordionErrors">
+                            <div class="accordion-body text-light">
+                                Hãy vào mục "Cửa hàng", bấm nút "Áp dụng" một lần nữa. Nếu vẫn lỗi, hãy thử tải lại trang (F5).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr class="border-secondary">
+                <div class="mt-3">
+                    <h6>Liên hệ trực tiếp:</h6>
+                    <p class="mb-1"><i class="fab fa-facebook text-primary"></i> <a href="#" class="text-decoration-none text-light">Fanpage MupClock</a></p>
+                    <p class="mb-1"><i class="fas fa-envelope text-warning"></i> admin@mupclock.com</p>
+                    <p><i class="fas fa-phone text-success"></i> 0909.xxx.xxx</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div> </div>
+
+    <footer class="mt-5 py-3 text-center text-muted border-top border-secondary">
+      <small>&copy; 2025 MUPCODER - Hệ sinh thái công cụ thời gian</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="../theme-manager.js"></script>
+
+    <script>
+        // Tự động điền tên người dùng nếu đã đăng nhập
+        const currentUser = localStorage.getItem("currentUser");
+        if(currentUser) {
+            document.getElementById('contactName').value = currentUser;
+        }
+// Hiển thị khu vực thanh toán
+        function showPayment(packageName) {
+            const area = document.getElementById('payment-area');
+            area.classList.remove('d-none');
+            // Cuộn xuống khu vực thanh toán
+            area.scrollIntoView({ behavior: 'smooth' });
+            // Có thể thêm logic điền tên gói vào nội dung chuyển khoản tại đây
+        }
+
+        // Xử lý gửi form (Demo)
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            
+            // Hiệu ứng loading
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang gửi...';
+
+            // Giả lập gửi dữ liệu
+            setTimeout(() => {
+                alert("Yêu cầu của bạn đã được gửi thành công! Chúng tôi sẽ phản hồi qua Email.");
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                e.target.reset();
+            }, 1500);
+        }
+    </script>
+  </body>
+</html>
