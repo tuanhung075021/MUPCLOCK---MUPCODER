@@ -1,17 +1,279 @@
-/* File: themes.css */
-.theme-tet {
-  background-color: #b03333 !important;
-  color: #ffeb3b !important;
+.slide {
+  width: 100% !important;
+  height: 73.5vh !important;
+  background-repeat: no-repeat !important;
+  overflow: hidden !important;
 }
-.theme-summer {
-  background: linear-gradient(to right, #b9b229, #eefa6d, #ffffff);
-  color: #333 !important;
+body {
+  /* Màu nền chung */
+  --bg-gradient: linear-gradient(180deg, #071127 0%, #071334 100%);
+
+  /* Các biến dùng cho trang Đếm Ngày & Shop */
+  --text: #e6eef8; /* Màu chữ */
+  --accent: #38bdf8; /* Màu nhấn (Nút, Tiêu đề) */
+  --card: rgba(255, 255, 255, 0.05); /* Nền kính mờ */
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
-.theme-autumn {
-  background-color: #d35400 !important;
+body {
+  --reactor-primary: #00f7ff; /* Màu chính (Glow sáng) */
+  --reactor-secondary: #6a00ff; /* Màu phụ (Glow tối) */
+  --reactor-accent: #00ffd1; /* Màu nhấn (Hạt năng lượng) */
+  --reactor-danger: #ff0055; /* Màu cảnh báo */
+  --reactor-bg: #000000; /* Màu nền */
+}
+body {
+  --rubik-text: #e6eef8; /* Màu số bình thường */
+  --rubik-wait: #ff0055; /* Màu khi đang giữ (Đỏ) */
+  --rubik-ready: #00ff00; /* Màu khi sẵn sàng (Xanh) */
+  --rubik-bg-grad: linear-gradient(180deg, #071127 0%, #071334 100%);
+}
+/* --- 1. THEME Light Mode --- */
+body.theme-default {
+  background: #fafafa !important;
+  color: #484b6a !important;
+}
+
+body.theme-default .navbar {
+  background-color: #484b6a !important;
+  border-bottom: 2px solid #9394a5;
+}
+
+/* Tab (Kho Giao diện / Âm thanh) */
+body.theme-default .nav-tabs .nav-link {
+  color: #484b6a !important;
+  border-color: #d2d3db;
+}
+body.theme-default .nav-tabs .nav-link.active {
+  background-color: #9394a5 !important;
+  color: #ffffff !important;
+  border-color: #d2d3db;
+}
+
+/* Card sản phẩm */
+body.theme-default .card {
+  background-color: #e4e5f1 !important;
+  border: 1px solid #d2d3db !important;
+}
+
+body.theme-default .btn-secondary:disabled {
+  background-color: #fafafa !important;
+  border-color: #9394a5 !important;
+  color: #9394a5 !important;
+  opacity: 1;
+  cursor: default;
+}
+body.theme-default .btn-outline-danger {
+  border-color: #3b8ac4 !important;
+  color: #254a8e !important;
+  opacity: 1;
+  cursor: default;
+}
+body.theme-default .btn-outline-danger:hover {
+  background-color: #9394a5a9 !important;
+  border-color: #3b8ac4 !important;
+  color: #484b6a !important;
+  opacity: 1;
+  cursor: default;
+}
+/* Nút bấm chính */
+body.theme-default .btn-primary {
+  background-color: #9394a5 !important;
+  border-color: #9394a5 !important;
+}
+body.theme-default {
+  /* Đổi màu chữ và Kim Giờ/Phút thành Vàng */
+  --text: #ffffff;
+  /* Đổi màu nền Card đồng hồ cho hợp tông Tết */
+  --card: #484b6ac6;
+  --glass: #9394a5; /* Màu nền mặt đồng hồ */
+}
+
+/* --- 1. THEME TẾT (Đỏ - Vàng) --- */
+body.theme-tet {
+  background: #fcf4e4 !important;
+  color: #89251b !important;
+}
+
+body.theme-tet .navbar {
+  background-color: #a8261a !important;
+  border-bottom: 2px solid #fa8d40;
+}
+
+/* Tab (Kho Giao diện / Âm thanh) */
+body.theme-tet .nav-tabs .nav-link {
+  color: #228620 !important;
+  border-color: #6fbb51;
+}
+body.theme-tet .nav-tabs .nav-link.active {
+  background-color: #6fbb50 !important;
+  color: #ffffff !important;
+  border-color: #6fbb50;
+}
+
+/* Card sản phẩm */
+body.theme-tet .card {
+  background-color: #fff5f5 !important;
+  border: 1px solid #fa8d40 !important;
+}
+.theme-preview-img {
+  height: 100px;
+  object-fit: cover; /* Đảm bảo ảnh phủ kín khung mà không bị méo */
+  border-bottom: 1px solid #eee; /* Đường viền nhẹ ngăn cách ảnh và tên */
+}
+body.theme-tet .btn-secondary:disabled {
+  background-color: #6fbb50 !important;
+  border-color: #6fbb50 !important;
   color: white !important;
+  opacity: 1;
+  cursor: default;
 }
-.theme-xmas {
-  background-color: #16a085 !important;
+/* Nút bấm chính */
+body.theme-tet .btn-primary {
+  background-color: #a8261a !important;
+  border-color: #fa8d40 !important;
+}
+body.theme-tet {
+  /* Đổi màu chữ và Kim Giờ/Phút thành Vàng */
+  --text: #ffffff;
+  /* Đổi màu Kim Giây thành Xanh lá (hoặc Trắng) cho nổi trên nền Đỏ */
+  --accent: #fa8d40;
+  /* Đổi màu nền Card đồng hồ cho hợp tông Tết */
+  --card: #a8261a99;
+  --glass: #6ebb5084; /* Màu nền mặt đồng hồ */
+}
+
+/* --- 2. THEME MÙA HẠ (Xanh Biển - Trắng) --- */
+body.theme-summer {
+  background: linear-gradient(#3b8ac4, #efdbcb);
+  color: #fcefe4;
+}
+
+body.theme-summer .navbar {
+  background-color: #254a8e !important;
+  border-bottom: 2px solid #efdbcb;
+}
+
+/* Tab (Kho Giao diện / Âm thanh) */
+body.theme-summer .nav-tabs .nav-link {
+  color: #fcefe4 !important;
+  border-color: #fcefe4;
+}
+body.theme-summer .nav-tabs .nav-link.active {
+  background-color: #345da7 !important;
+  color: #ffffff !important;
+  border-color: #345da7;
+}
+
+/* Card sản phẩm */
+body.theme-summer .card {
+  background-color: #fff5f5 !important;
+  border: 1px solid #efdbcb !important;
+}
+.theme-preview-img {
+  height: 100px;
+  object-fit: cover; /* Đảm bảo ảnh phủ kín khung mà không bị méo */
+  border-bottom: 1px solid #eee; /* Đường viền nhẹ ngăn cách ảnh và tên */
+}
+body.theme-summer .btn-secondary:disabled {
+  background-color: #3b8bc469 !important;
+  border-color: #3b8ac4 !important;
   color: white !important;
+  opacity: 1;
+  cursor: default;
+}
+body.theme-summer .btn-outline-danger {
+  border-color: #3b8ac4 !important;
+  color: #254a8e !important;
+  opacity: 1;
+  cursor: default;
+}
+body.theme-summer .btn-outline-danger:hover {
+  background-color: #3b8bc4b7 !important;
+  border-color: #3b8ac4 !important;
+  color: #254a8e !important;
+  opacity: 1;
+  cursor: default;
+}
+/* Nút bấm chính */
+body.theme-summer .btn-primary {
+  background-color: #3b8ac4 !important;
+  border-color: #4bb4de !important;
+}
+body.theme-summer {
+  --text: #ffffff !important;
+
+  --card: #254a8e91 !important;
+  --glass: #3b8bc4b7 !important;
+}
+body.theme-summer .timer-container {
+  text-align: center;
+  background: #64a8da69;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+body.theme-summer .display {
+  color: #254a8e; /* Dùng biến màu */
+}
+body.theme-summer .btn-start {
+  background-color: #3b8ac4; /* Màu accent */
+  color: #fff5f5;
+}
+body.theme-summer .btn-pause {
+  background-color: #fff5f5;
+  color: #254a8e;
+}
+body.theme-summer .btn-reset {
+  background-color: #254a8e;
+}
+
+/* --- 3. THEME MÙA THU (Cam - Nâu) --- */
+body.theme-autumn {
+  background: #d35400 !important;
+  color: #fff;
+}
+
+body.theme-autumn .navbar {
+  background-color: #a04000 !important;
+}
+
+body.theme-autumn .nav-tabs .nav-link.active {
+  background-color: #e67e22 !important;
+  color: white !important;
+  border-bottom-color: white;
+}
+
+/* --- 4. THEME GIÁNG SINH (Xanh Lá - Đỏ) --- */
+body.theme-xmas {
+  background: #16a085 !important; /* Xanh lá đậm */
+  color: #fff;
+}
+
+body.theme-xmas .navbar {
+  background-color: #0b5345 !important;
+  border-bottom: 3px solid #c0392b; /* Viền đỏ */
+}
+
+/* Đổi màu các Tab (Kho Giao diện / Âm thanh) */
+body.theme-xmas .nav-tabs .nav-link {
+  color: #ffeb3b !important; /* Chữ vàng */
+  border-color: #ffeb3b;
+}
+body.theme-xmas .nav-tabs .nav-link.active {
+  background-color: #ffeb3b !important; /* Nền vàng */
+  color: #b30000 !important; /* Chữ đỏ */
+  border-color: #ffeb3b;
+}
+
+/* Đổi màu Card sản phẩm */
+body.theme-xmas .card {
+  background-color: #fff5f5; /* Trắng hồng */
+  border: 1px solid #ffeb3b;
+}
+
+/* Đổi màu Nút bấm chính */
+body.theme-xmas .btn-primary {
+  background-color: #d32f2f !important;
+  border-color: #ffeb3b !important;
 }

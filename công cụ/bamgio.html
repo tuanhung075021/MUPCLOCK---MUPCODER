@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bấm Giờ - Công Cụ - MUPCODER</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../themes.css" />
+    <script src="../kiemdangnhap.js"></script>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+
+        /* Dùng biến từ themes.css */
+        background: var(--rubik-bg-grad);
+        color: var(--rubik-text);
+
+        min-height: 100vh;
+        padding-top: 60px;
+        user-select: none;
+      }
+
+      /* Vùng chứa nội dung chính */
+      .content-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 60px);
+        width: 100%;
+        position: relative;
+      }
+
+      /* Màn hình hiển thị giờ */
+      #timer-display {
+        font-family: "Orbitron", sans-serif;
+        font-size: 120px; /* Số cực to */
+        font-weight: 700;
+        text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+        transition: color 0.2s;
+        cursor: pointer;
+      }
+
+      .state-idle {
+        color: var(--rubik-text) !important;
+      }
+      .state-holding {
+        color: var(--rubik-wait) !important;
+      }
+      .state-ready {
+        color: var(--rubik-ready) !important;
+      }
+      .state-running {
+        color: var(--rubik-text) !important;
+      }
+
+      /* Hướng dẫn */
+      .instruction {
+        margin-top: 20px;
+        opacity: 0.6;
+        font-size: 14px;
+        letter-spacing: 1px;
+      }
+
+      /* Khu vực lịch sử (Stats) */
+      .stats-panel {
+        margin-top: 50px;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        width: 90%;
+        max-width: 600px;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+
+      .stat-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      /* Nút xóa lịch sử */
+      .btn-clear {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #aaa;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        margin-top: 10px;
+        transition: all 0.3s;
+      }
+      .btn-clear:hover {
+        background: rgba(255, 0, 0, 0.2);
+        color: white;
+        border-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html"><b>MUPCLOCK</b></a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">Trang chủ</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle active"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                >Công cụ</a
+              >
+              <ul class="dropdown-menu dropdown-menu-dark">
+                <li>
+                  <a class="dropdown-item" href="demnguoc.html">Đếm ngược</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="bamgio.html"
+                    >Bấm giờ (Rubik)</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="donghothegioi.html"
+                    >Giờ thế giới</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="dem-khoa/dem.html">Đếm ngày</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../cửa hàng/shop.html">Cửa Hàng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../tài khoản/account.html">Tài khoản</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../liên hệ/contact.html">Liên hệ</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="content-wrapper">
+      <div
+        id="scramble"
+        style="
+          font-size: 1.2rem;
+          margin-bottom: 30px;
+          color: #aaa;
+          text-align: center;
+          padding: 0 20px;
+        "
+      >
+        R2 U' F2 D L2 B2 D L2 U B2 U' B L F' D' L U' R' F'
+      </div>
+
+      <div id="timer-display" class="state-idle">0.00</div>
+
+      <div class="instruction">
+        <i class="fas fa-hand-paper"></i> Nhấn giữ <b>SPACE</b> để sẵn sàng —
+        Thả ra để chạy
+      </div>
+
+      <div class="stats-panel">
+        <h6 class="text-muted text-uppercase small mb-3">Lịch sử thành tích</h6>
+        <div id="history-list"></div>
+        <button class="btn-clear" onclick="clearHistory()">Xóa lịch sử</button>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="../theme-manager.js"></script>
+
+    <script>
+      // --- LOGIC RUBIK TIMER ---
+
+      let timerInterval;
+      let startTime = 0;
+      let elapsedTime = 0;
+      let isRunning = false;
+      let isHolding = false;
+      let holdStartTime = 0;
+      let isReady = false;
+
+      const display = document.getElementById("timer-display");
+      const historyList = document.getElementById("history-list");
+      const scrambleEl = document.getElementById("scramble");
+
+      // Cập nhật hiển thị
+      function updateDisplay(timeMs) {
+        const seconds = Math.floor(timeMs / 1000);
+        const ms = Math.floor((timeMs % 1000) / 10); // Lấy 2 số đầu của ms
+        display.innerText = `${seconds}.${ms.toString().padStart(2, "0")}`;
+      }
+
+      // Sinh công thức xáo trộn ngẫu nhiên (Scramble)
+      function generateScramble() {
+        const moves = ["R", "L", "U", "D", "F", "B"];
+        const mods = ["", "'", "2"];
+        let scramble = [];
+        let lastMove = "";
+
+        for (let i = 0; i < 20; i++) {
+          let move = moves[Math.floor(Math.random() * moves.length)];
+          // Tránh lặp lại move (VD: không sinh R R)
+          while (move === lastMove) {
+            move = moves[Math.floor(Math.random() * moves.length)];
+          }
+          let mod = mods[Math.floor(Math.random() * mods.length)];
+          scramble.push(move + mod);
+          lastMove = move;
+        }
+        scrambleEl.innerText = scramble.join(" ");
+      }
+
+      // Xử lý sự kiện bàn phím
+      window.addEventListener("keydown", (e) => {
+        if (e.code === "Space") {
+          e.preventDefault(); // Chặn cuộn trang
+
+          if (isRunning) {
+            // Nếu đang chạy -> Dừng lại
+            stopTimer();
+          } else {
+            // Nếu đang dừng -> Bắt đầu giữ
+            if (!isHolding) {
+              isHolding = true;
+              display.className = "state-holding"; // Màu đỏ
+              holdStartTime = Date.now();
+
+              // Kiểm tra giữ đủ lâu (0.3s) thì chuyển sang xanh
+              setTimeout(() => {
+                if (isHolding) {
+                  isReady = true;
+                  display.className = "state-ready"; // Màu xanh
+                }
+              }, 300);
+            }
+          }
+        } else {
+          // Phím bất kỳ khác cũng dừng đồng hồ
+          if (isRunning) stopTimer();
+        }
+      });
+
+      window.addEventListener("keyup", (e) => {
+        if (e.code === "Space") {
+          if (isReady) {
+            // Nếu đã sẵn sàng (Xanh) -> Chạy
+            startTimer();
+          } else {
+            // Nếu chưa sẵn sàng (còn Đỏ) -> Reset về bình thường
+            display.className = "state-idle";
+          }
+          isHolding = false;
+          isReady = false;
+        }
+      });
+
+      // Hỗ trợ cảm ứng (cho điện thoại)
+      document.body.addEventListener("touchstart", () => {
+        if (isRunning) stopTimer();
+        else if (!isHolding) {
+          isHolding = true;
+          display.className = "state-holding";
+          setTimeout(() => {
+            if (isHolding) {
+              isReady = true;
+              display.className = "state-ready";
+            }
+          }, 300);
+        }
+      });
+
+      document.body.addEventListener("touchend", () => {
+        if (isReady) startTimer();
+        else display.className = "state-idle";
+        isHolding = false;
+        isReady = false;
+      });
+
+      function startTimer() {
+        isRunning = true;
+        startTime = Date.now();
+        display.className = "state-running";
+
+        timerInterval = setInterval(() => {
+          elapsedTime = Date.now() - startTime;
+          updateDisplay(elapsedTime);
+        }, 10); // Cập nhật mỗi 10ms
+      }
+
+      function stopTimer() {
+        isRunning = false;
+        clearInterval(timerInterval);
+        display.className = "state-idle";
+
+        // Lưu kết quả
+        saveResult(display.innerText);
+        generateScramble(); // Tạo scramble mới
+      }
+
+      function saveResult(timeStr) {
+        const div = document.createElement("div");
+        div.className = "stat-item";
+        div.innerHTML = `<span>${new Date().toLocaleTimeString()}</span> <b>${timeStr}</b>`;
+        historyList.prepend(div); // Thêm vào đầu danh sách
+      }
+
+      function clearHistory() {
+        if (confirm("Xóa hết thành tích?")) {
+          historyList.innerHTML = "";
+        }
+      }
+
+      // FIX MENU MOBILE
+      document
+        .querySelectorAll(".dropdown-menu a.dropdown-item")
+        .forEach((link) => {
+          link.addEventListener("click", () => {
+            const navCollapse = document.getElementById("navbarNav");
+            if (navCollapse && navCollapse.classList.contains("show")) {
+              navCollapse.classList.remove("show");
+            }
+          });
+        });
+
+      // Khởi tạo
+      generateScramble();
+    </script>
+  </body>
+</html>

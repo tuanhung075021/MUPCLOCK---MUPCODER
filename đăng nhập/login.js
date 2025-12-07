@@ -1,5 +1,5 @@
 // Nhập công cụ từ file cấu hình chung
-import { db, ref, set, get, child } from "./firebase-config.js";
+import { db, ref, set, get, child } from "../firebase-config.js";
 
 // --- XỬ LÝ ẨN HIỆN FORM ---
 document.getElementById("dangki").addEventListener("click", (e) => {
@@ -49,10 +49,9 @@ document.getElementById("login-form").addEventListener("submit", (e) => {
       if (snapshot.exists()) {
         const userData = snapshot.val();
         if (userData.password === inputPass) {
-          alert("Đăng nhập thành công!");
           localStorage.setItem("currentUser", inputUser);
           localStorage.setItem("lastActive", Date.now());
-          window.location.href = "app.html";
+          window.location.href = "../công cụ/app.html";
         } else {
           alert("Sai mật khẩu!");
         }

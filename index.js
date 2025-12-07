@@ -24,7 +24,7 @@ if (currentUser) {
   // B. Thay đổi nút to ở giữa màn hình (Từ Vàng -> Xanh)
   if (heroBtnContainer) {
     heroBtnContainer.innerHTML = `
-            <a href="app.html" class="btn btn-success btn-lg px-5 py-3 fw-bold">VÀO APP NGAY</a>
+            <a href="công cụ/app.html" class="btn btn-success btn-lg px-5 py-3 fw-bold">VÀO APP NGAY</a>
         `;
   }
 

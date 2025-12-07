@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đồng hồ đếm ngày</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="../../themes.css" />
+    <script src="../../kiemdangnhap.js"></script>
+
+    <style>
+      /* KHÔNG KHAI BÁO :ROOT NỮA - Lấy từ themes.css */
+
+      * {
+        box-sizing: border-box;
+      }
+
+      /* SỬA BODY: Giống donghothegioi.html */
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        background-color: transparent; /* Để hiện nền của Theme */
+        color: var(--text);
+        min-height: 100vh;
+        padding: 0;
+        padding-top: 60px; /* Chừa chỗ cho Navbar */
+      }
+
+      /* WRAPPER CHUẨN (Giống donghothegioi) */
+      .grid-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        padding: 20px;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        margin: 0 0 10px;
+        font-size: 24px;
+        letter-spacing: 0.5px;
+        color: var(--accent);
+        text-align: center;
+      }
+      .subtitle {
+        opacity: 0.7;
+        font-size: 14px;
+        margin-bottom: 30px;
+        text-align: center;
+      }
+
+      /* CARD CHUẨN (Giống donghothegioi) */
+      .card {
+        background: var(--card); /* Lấy từ themes.css */
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      /* CONTROLS (Khu vực nút bấm) */
+      .controls {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 10px;
+      }
+
+      input,
+      button {
+        padding: 10px 15px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--text);
+        outline: none;
+        font-size: 14px;
+      }
+
+      input[type="datetime-local"] {
+        color-scheme: dark;
+      }
+
+      button {
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.2s;
+      }
+      button:hover {
+        opacity: 0.8;
+      }
+
+      /* Nút màu đặc biệt */
+      .btn-primary {
+        background: var(--accent);
+        color: #000;
+        border: none;
+      }
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text);
+      }
+      .btn-danger {
+        background: #ff4757;
+        color: white;
+        border: none;
+      }
+      .btn-preset {
+        background: rgba(255, 255, 255, 0.05);
+        font-size: 12px;
+      }
+
+      /* HIỂN THỊ THỜI GIAN (Time Units) */
+      .time-units {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin: 20px 0;
+        flex-wrap: wrap;
+      }
+      .unit {
+        text-align: center;
+      }
+      .unit-number {
+        font-family: monospace;
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: var(--accent);
+      }
+      .unit-label {
+        font-size: 0.8rem;
+        opacity: 0.7;
+        text-transform: uppercase;
+      }
+      .separator {
+        font-size: 2rem;
+        opacity: 0.3;
+        margin-top: -5px;
+      }
+
+      /* THANH TIẾN TRÌNH */
+      .progress-container {
+        margin: 20px 0;
+      }
+      .progress-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        margin-bottom: 5px;
+        opacity: 0.8;
+      }
+      .progress-bar {
+        height: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        background: var(--accent);
+        width: 0%;
+        transition: width 0.5s;
+      }
+
+      /* INFO PANEL (Lưới thông tin) */
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+      .info-item {
+        text-align: center;
+        padding: 10px;
+      }
+      .info-item i {
+        font-size: 24px;
+        color: var(--accent);
+        margin-bottom: 8px;
+      }
+      .info-item h3 {
+        font-size: 14px;
+        opacity: 0.7;
+        margin: 0;
+      }
+      .info-item p {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 5px 0 0;
+      }
+
+      @media (max-width: 600px) {
+        .separator {
+          display: none;
+        }
+        .time-units {
+          gap: 10px;
+        }
+        .unit-number {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html">⏱️ MUPCLOCK</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">Trang chủ</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle active"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                >Công cụ</a
+              >
+              <ul class="dropdown-menu dropdown-menu-dark">
+                <li>
+                  <a class="dropdown-item" href="../demnguoc.html">Đếm ngược</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="../bamgio.html">Bấm giờ</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="../donghothegioi.html"
+                    >Giờ thế giới</a
+                  >
+                </li>
+                <li><a class="dropdown-item" href="dem.html">Đếm ngày</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../cửa hàng/shop.html">Cửa Hàng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../tài khoản/account.html">Tài khoản</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../liên hệ/contact.html">Liên hệ</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="grid-wrapper">
+      <header>
+        <h1>Đồng hồ đếm ngày</h1>
+        <p class="subtitle">Quản lý thời gian đến sự kiện quan trọng</p>
+      </header>
+
+      <div class="card">
+        <div class="controls">
+          <input type="datetime-local" id="target-date" />
+          <button id="start-btn" class="btn-primary">Bắt đầu</button>
+          <button id="stop-btn" class="btn-secondary">Dừng</button>
+          <button id="reset-btn" class="btn-danger">Reset</button>
+        </div>
+        <div class="controls">
+          <button class="btn-preset" data-hours="1">+1 Giờ</button>
+          <button class="btn-preset" data-days="1">+1 Ngày</button>
+          <button class="btn-preset" data-days="7">+1 Tuần</button>
+          <button class="btn-preset" data-days="30">+1 Tháng</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="time-units">
+          <div class="unit">
+            <div class="unit-number" id="days">00</div>
+            <div class="unit-label">Ngày</div>
+          </div>
+          <div class="separator">:</div>
+          <div class="unit">
+            <div class="unit-number" id="hours">00</div>
+            <div class="unit-label">Giờ</div>
+          </div>
+          <div class="separator">:</div>
+          <div class="unit">
+            <div class="unit-number" id="minutes">00</div>
+            <div class="unit-label">Phút</div>
+          </div>
+          <div class="separator">:</div>
+          <div class="unit">
+            <div class="unit-number" id="seconds">00</div>
+            <div class="unit-label">Giây</div>
+          </div>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-label">
+            <span>Tiến trình:</span>
+            <span id="progress-text">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="info-grid">
+          <div class="info-item">
+            <i class="fas fa-bullseye"></i>
+            <h3>Mục tiêu</h3>
+            <p id="target-date-display">--/--/----</p>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-hourglass-half"></i>
+            <h3>Còn lại</h3>
+            <p id="time-remaining-display">--</p>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-info-circle"></i>
+            <h3>Trạng thái</h3>
+            <p id="status-display">Chờ bắt đầu</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="../theme-manager.js"></script>
+
+    <script>
+      // FIX MENU MOBILE
+      document
+        .querySelectorAll(".dropdown-menu a.dropdown-item")
+        .forEach((link) => {
+          link.addEventListener("click", () => {
+            const navCollapse = document.getElementById("navbarNav");
+            if (navCollapse && navCollapse.classList.contains("show")) {
+              navCollapse.classList.remove("show");
+            }
+          });
+        });
+    </script>
+  </body>
+</html>

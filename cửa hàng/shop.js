@@ -1,34 +1,48 @@
 // 1. Thêm import ở đầu file
-import { applyTheme } from "./theme-manager.js";
-import { db, ref, set, get, child, update } from "./firebase-config.js";
+import { applyTheme } from "../theme-manager.js";
+import { db, ref, set, get, child, update } from "../firebase-config.js";
 
 const currentUser = localStorage.getItem("currentUser");
 
 // 1. KHAI BÁO DANH SÁCH SẢN PHẨM (DATABASE ẢO)
 const THEMES = [
-  { id: "theme-default", name: "Mặc Định (Sáng)", price: 0, class: "bg-light" },
+  {
+    id: "theme-default",
+    name: "Mặc Định - Light Mode",
+    price: 0,
+    class: "bg-light",
+    image: "light.png",
+  },
   {
     id: "theme-tet",
     name: "Tết Nguyên Đán",
-    price: 100,
-    class: "bg-danger text-warning",
+    price: 500,
+    class: "demo",
+    image: "eye.png",
   }, // Màu đỏ chữ vàng
   {
     id: "theme-summer",
-    name: "Mùa Hạ Rực Rỡ",
-    price: 50,
+    name: "Ocean Dream",
+    price: 100,
     class: "bg-warning text-dark",
+    image: "bien.png",
   },
   {
     id: "theme-autumn",
-    name: "Mùa Thu Lãng Mạn",
-    price: 50,
+    name: "Autumn Day",
+    price: 200,
     class: "bg-secondary text-white",
-  }, // Tạm dùng màu xám
+  },
   {
     id: "theme-xmas",
-    name: "Giáng Sinh An Lành",
-    price: 100,
+    name: "Christmas Around the World",
+    price: 250,
+    class: "bg-success text-white",
+  },
+  {
+    id: "theme-darl",
+    name: "Dark Mode",
+    price: 50,
     class: "bg-success text-white",
   },
 ];
@@ -36,31 +50,31 @@ const THEMES = [
 const SOUNDS = [
   {
     id: "sound-beep",
-    name: "Beep Beep (Cơ bản)",
+    name: "Beep Beep",
     price: 0,
     file: "sounds/beep.mp3",
   },
   {
     id: "sound-firework",
-    name: "Pháo Hoa (Tết)",
+    name: "Pháo Hoa",
     price: 100,
     file: "sounds/firework.mp3",
   },
   {
     id: "sound-sea",
-    name: "Sóng Biển (Hạ)",
+    name: "Sóng Biển",
     price: 50,
     file: "sounds/sea.mp3",
   },
   {
     id: "sound-rain",
-    name: "Tiếng Mưa (Thu)",
+    name: "Tiếng Mưa",
     price: 50,
     file: "sounds/rain.mp3",
   },
   {
     id: "sound-jingle",
-    name: "Chuông Tuyết (Noel)",
+    name: "Chuông Tuyết",
     price: 100,
     file: "sounds/jingle.mp3",
   },
@@ -114,7 +128,7 @@ function loadShopUI() {
 
       let btnAction = "";
       if (isEquipped) {
-        btnAction = `<button class="btn btn-success w-100" disabled>Đang dùng</button>`;
+        btnAction = `<button class="btn btn-secondary text-dark w-100" disabled><b>Đang dùng</b></button>`;
       } else if (isOwned) {
         // Lưu ý: Dùng arrow function trong onclick cần cẩn thận, ta dùng ID để bắt sự kiện sau
         btnAction = `<button class="btn btn-primary w-100 btn-equip-theme" data-id="${item.id}">Áp dụng</button>`;
@@ -123,16 +137,18 @@ function loadShopUI() {
       }
 
       return `
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <div class="card-body ${item.class} border" style="height: 100px; display:flex; align-items:center; justify-content:center;">
-                            <h5>${item.name}</h5>
-                        </div>
-                        <div class="card-footer bg-white border-top-0">
-                            ${btnAction}
-                        </div>
-                    </div>
+                <div class="col-12 col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <img src="${item.image}" class="card-img-top theme-preview-img" alt="${item.name}">
+                
+                <div class="card-body text-center p-2 ">
+                    <h5 class="card-title mb-0">${item.name}</h5>
                 </div>
+                
+                <div class="card-footer bg-white border-top-0">
+                    ${btnAction} </div>
+            </div>
+        </div>
             `;
     }).join("");
     document.getElementById("theme-list").innerHTML = themeHTML;
@@ -144,7 +160,7 @@ function loadShopUI() {
 
       let btnAction = "";
       if (isEquipped) {
-        btnAction = `<button class="btn btn-success w-100" disabled>Đang dùng</button>`;
+        btnAction = `<button class="btn btn-secondary text-dark w-100" disabled><b>Đang dùng</b></button>`;
       } else if (isOwned) {
         btnAction = `<button class="btn btn-primary w-100 btn-equip-sound" data-id="${item.id}">Dùng</button>`;
       } else {
@@ -155,8 +171,8 @@ function loadShopUI() {
                 <div class="col-md-4 mb-4">
                     <div class="card h-100">
                         <div class="card-body text-center">
-                            <h5>🔊 ${item.name}</h5>
-                            <button class="btn btn-sm btn-light mt-2" onclick="alert('Đang phát thử: ${item.name}')">▶ Nghe thử</button>
+                            <h5> ${item.name}</h5>
+                            <button class="btn btn-sm btn-light mt-2" onclick="alert('Đang phát thử: ${item.name}')">Nghe thử</button>
                         </div>
                         <div class="card-footer bg-white border-top-0">
                             ${btnAction}
@@ -232,8 +248,6 @@ function equipItem(itemId, type) {
   updates["/settings/" + type] = itemId;
 
   update(userRef, updates).then(() => {
-    alert("Đã áp dụng thành công!");
-
     // CẬP NHẬT NGAY LẬP TỨC
     if (type === "theme") {
       localStorage.setItem("currentTheme", itemId); // Lưu tạm để các trang khác biết

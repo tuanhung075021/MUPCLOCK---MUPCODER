@@ -1,5 +1,5 @@
 // 1. NHẬP CÔNG CỤ TỪ FILE CẤU HÌNH
-import { db, ref, get, update } from "./firebase-config.js";
+import { db, ref, get, update } from "../firebase-config.js";
 
 // 2. KHỞI TẠO & KIỂM TRA ĐĂNG NHẬP
 const currentUser = localStorage.getItem("currentUser");
@@ -39,12 +39,10 @@ function renderBio(info) {
 
         <hr class="my-2">
 
-        <p class="mb-1"><strong>👤 Họ tên:</strong> ${
-          info.fullname || "..."
-        }</p>
-        <p class="mb-1"><strong>📞 SĐT:</strong> ${info.phone || "..."}</p>
-        <p class="mb-1"><strong>📧 Email:</strong> ${info.email || "..."}</p>
-        <p class="mb-0"><strong>🏠 Đ/C:</strong> ${info.address || "..."}</p>
+        <p class="mb-1"><strong>Họ tên:</strong> ${info.fullname || "..."}</p>
+        <p class="mb-1"><strong>SĐT:</strong> ${info.phone || "..."}</p>
+        <p class="mb-1"><strong>Email:</strong> ${info.email || "..."}</p>
+        <p class="mb-0"><strong>Địa chỉ:</strong> ${info.address || "..."}</p>
     `;
 }
 
@@ -134,7 +132,7 @@ document.getElementById("file-input").addEventListener("change", function (e) {
 
     // Lưu lên Firebase
     update(userRef, { "/info/avatar": base64String })
-      .then(() => alert("📸 Đã cập nhật ảnh đại diện!"))
+      .then(() => alert("Đã cập nhật ảnh đại diện!"))
       .catch((err) => alert("Lỗi tải ảnh: " + err));
   };
   reader.readAsDataURL(file);

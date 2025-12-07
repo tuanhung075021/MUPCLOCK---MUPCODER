@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Đồng hồ thế giới</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../themes.css" />
+    <script src="../kiemdangnhap.js"></script>
+
+    <style>
+      /* Định nghĩa các biến màu dùng chung */
+      :root {
+        --bg: #0f1724;
+        --card: #0b1220;
+        --accent: #38bdf8;
+        --glass: rgba(255, 255, 255, 0.04);
+        --text: #e6eef8;
+      }
+      * {
+        box-sizing: border-box;
+      }
+
+      /* SỬA BODY: Xóa căn giữa, thêm padding-top để chừa chỗ cho Fixed Navbar */
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, Arial, Helvetica, sans-serif;
+        color: var(--text); /* Màu chữ chung */
+        min-height: 100vh;
+        padding: 0; /* Đặt lại padding về 0 */
+        padding-top: 0px; /* Chừa chỗ cho Navbar */
+
+        background: linear-gradient(180deg, #e5e5e5 50%, #071334 100%);
+      }
+
+      .grid-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        padding-left: 28px;
+        padding-right: 28px;
+      }
+
+      h1 {
+        margin: 0 0 18px;
+        font-size: 20px;
+        letter-spacing: 0.4px;
+      }
+      .controls {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+      select,
+      input,
+      button {
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: var(--card);
+        color: var(--text);
+        outline: none;
+      }
+      button {
+        cursor: pointer;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 14px;
+        width: 100%;
+        max-width: 1100px;
+      }
+      .card {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.8),
+          transparent
+        );
+        border-radius: 12px;
+        padding: 14px;
+        box-shadow: 0 6px 18px rgba(2, 6, 23, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+      }
+      .title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .city {
+        font-weight: 600;
+      }
+      .offset {
+        font-size: 12px;
+        opacity: 0.7;
+      }
+      .clock-wrap {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .analog {
+        position: relative;
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: var(--glass);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .dial {
+        position: absolute;
+        inset: 6px;
+        border-radius: 50%;
+        background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.06));
+      }
+      .hand {
+        position: absolute;
+        left: 50%;
+        bottom: 50%;
+        transform-origin: bottom center;
+        transform: translateX(-50%);
+      }
+      .hour {
+        width: 4px;
+        height: 18px;
+        border-radius: 3px;
+        background: var(--text);
+      }
+
+      .min {
+        width: 3px;
+        height: 26px;
+        border-radius: 3px;
+        background: var(--text);
+      }
+      .center-dot {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--text);
+        transform: translate(-50%, -50%);
+        z-index: 3;
+      }
+      .digital {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 14px;
+      }
+      .meta {
+        font-size: 12px;
+        opacity: 0.8;
+      }
+      .empty {
+        opacity: 0.7;
+        font-size: 14px;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+      }
+      .remove-btn {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        padding: 6px;
+        border-radius: 8px;
+        color: inherit;
+      }
+      @media (max-width: 520px) {
+        .clock-wrap {
+          flex-direction: row;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html"><b>MUPCLOCK</b></a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">Trang chủ</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle active"
+                href="#"
+                id="navbarDarkDropdownMenuLink"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Công cụ
+              </a>
+
+              <ul
+                class="dropdown-menu dropdown-menu-dark"
+                aria-labelledby="navbarDarkDropdownMenuLink"
+              >
+                <li>
+                  <a class="dropdown-item" href="demnguoc.html">Đếm ngược</a>
+                </li>
+                <li><a class="dropdown-item" href="bamgio.html">Bấm giờ</a></li>
+                <li>
+                  <a class="dropdown-item" href="donghothegioi.html"
+                    >Giờ thế giới</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="dem-khoa/dem.html">Đếm ngày</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../cửa hàng/shop.html">Cửa Hàng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../tài khoản/account.html">Tài khoản</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../liên hệ/contact.html">Liên hệ</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="grid-wrapper">
+      <h1>Đồng hồ thế giới</h1>
+
+      <div class="controls">
+        <select id="tz-select" aria-label="Chọn múi giờ"></select>
+        <button id="add-btn">Thêm đồng hồ</button>
+      </div>
+
+      <div class="grid" id="clocks"></div>
+    </div>
+
+    <template id="clock-tpl">
+      <div class="card">
+        <div class="title-row">
+          <div>
+            <div class="city"></div>
+            <div class="offset"></div>
+          </div>
+          <div class="actions">
+            <button class="remove-btn">Xóa</button>
+          </div>
+        </div>
+        <div class="clock-wrap">
+          <div class="analog">
+            <div class="dial"></div>
+            <div class="hand hour"></div>
+            <div class="hand min"></div>
+            <div class="hand sec"></div>
+            <div class="center-dot"></div>
+          </div>
+          <div>
+            <div class="digital"></div>
+            <div class="meta"></div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <script>
+      // Danh sách các múi giờ (IANA) + tên thân thiện (có thể mở rộng)
+      const TIMEZONES = [
+        ["UTC", "UTC"],
+        ["Europe/London", "London"],
+        ["Europe/Paris", "Paris"],
+        ["Europe/Berlin", "Berlin"],
+        ["America/New_York", "New York"],
+        ["America/Los_Angeles", "Los Angeles"],
+        ["America/Sao_Paulo", "Sao Paulo"],
+        ["Asia/Tokyo", "Tokyo"],
+        ["Asia/Shanghai", "Shanghai"],
+        ["Asia/Ho_Chi_Minh", "Ho Chi Minh"],
+        ["Asia/Kolkata", "Kolkata"],
+        ["Australia/Sydney", "Sydney"],
+        ["Pacific/Auckland", "Auckland"],
+      ];
+
+      const select = document.getElementById("tz-select");
+      const addBtn = document.getElementById("add-btn");
+      const clocksWrap = document.getElementById("clocks");
+      const tpl = document.getElementById("clock-tpl");
+      const search = document.getElementById("search");
+
+      // populate select
+      for (const [tz, name] of TIMEZONES) {
+        const o = document.createElement("option");
+        o.value = tz;
+        o.textContent = `${name} — ${tz}`;
+        select.appendChild(o);
+      }
+
+      function formatPartsForTZ(tz) {
+        // Lấy giờ theo múi giờ bằng formatToParts
+        const fmt = new Intl.DateTimeFormat(undefined, {
+          timeZone: tz,
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          weekday: "short",
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          timeZoneName: "short",
+        });
+        return fmt;
+      }
+
+      function getTimeParts(tz) {
+        const fmt = formatPartsForTZ(tz);
+        const parts = fmt.formatToParts(new Date());
+        const obj = {};
+        for (const p of parts) {
+          if (p.type !== "literal") obj[p.type] = p.value;
+        }
+        // hour, minute, second may be strings; convert
+        obj.hour = Number(obj.hour);
+        obj.minute = Number(obj.minute);
+        obj.second = Number(obj.second);
+        return obj; // also includes weekday, day, month, year, timeZoneName
+      }
+
+      function createClock(tz, displayName) {
+        const node = tpl.content.firstElementChild.cloneNode(true);
+        const cityEl = node.querySelector(".city");
+        const offsetEl = node.querySelector(".offset");
+        const digital = node.querySelector(".digital");
+        const meta = node.querySelector(".meta");
+        const hourHand = node.querySelector(".hour");
+        const minHand = node.querySelector(".min");
+        const secHand = node.querySelector(".sec");
+        const removeBtn = node.querySelector(".remove-btn");
+
+        cityEl.textContent = displayName || tz;
+        offsetEl.textContent = tz;
+
+        function update() {
+          const p = getTimeParts(tz);
+          // digital
+          digital.textContent = `${String(p.hour).padStart(2, "0")}:${String(
+            p.minute
+          ).padStart(2, "0")}:${String(p.second).padStart(2, "0")}`;
+          meta.textContent = `${p.weekday || ""} ${p.day || ""} ${
+            p.month || ""
+          } ${p.year || ""} • ${p.timeZoneName || ""}`;
+          // analog angles
+          const second = p.second;
+          const minute = p.minute + second / 60;
+          const hour = (p.hour % 12) + minute / 60;
+          const secDeg = second * 6; // 360/60
+          const minDeg = minute * 6;
+          const hourDeg = hour * 30; // 360/12
+          secHand.style.transform = `translateX(-50%) rotate(${secDeg}deg)`;
+          minHand.style.transform = `translateX(-50%) rotate(${minDeg}deg)`;
+          hourHand.style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+        }
+
+        update();
+        const interval = setInterval(update, 1000);
+
+        removeBtn.addEventListener("click", () => {
+          clearInterval(interval);
+          node.remove();
+        });
+
+        clocksWrap.appendChild(node);
+      }
+
+      // Thêm mặc định một số đồng hồ
+      [
+        "Asia/Ho_Chi_Minh",
+        "Europe/London",
+        "America/New_York",
+        "Asia/Tokyo",
+      ].forEach((tz) => {
+        const name = TIMEZONES.find((x) => x[0] === tz)?.[1] || tz;
+        createClock(tz, name);
+      });
+
+      addBtn.addEventListener("click", () => {
+        const tz = select.value;
+        const name = TIMEZONES.find((x) => x[0] === tz)?.[1] || tz;
+        createClock(tz, name);
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="module" src="../theme-manager.js"></script>
+  </body>
+</html>

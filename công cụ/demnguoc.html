@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đếm Ngược - Công Cụ - MUPCLOCK</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../themes.css" />
+    <script src="../kiemdangnhap.js"></script>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      :root {
+        --ring-size: clamp(280px, 45vmin, 420px);
+      }
+      body {
+        --primary-glow: var(--reactor-primary);
+        --secondary-glow: var(--reactor-secondary);
+        --accent: var(--reactor-accent);
+        --danger-glow: var(--reactor-danger);
+        --bg: var(--reactor-bg);
+      }
+      body {
+        margin: 0;
+        background: var(--bg); /* <-- Quan trọng */
+        font-family: "Orbitron", sans-serif;
+        color: var(--primary-glow);
+        min-height: 100vh;
+        padding-top: 60px; /* Thêm padding-top để chừa chỗ cho Navbar */
+        /* Xóa thuộc tính display: flex, align-items: center, height: 100vh cũ */
+      }
+
+      /* Wrapper dùng để căn giữa nội dung còn lại */
+      .content-center-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 60px); /* Lấy hết không gian còn lại */
+        width: 100%;
+      }
+
+      /* Tweak các thành phần gốc của bạn (Giữ nguyên) */
+      .timer-container {
+        text-align: center;
+        background: #333;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+      .display {
+        font-size: 4rem;
+        font-weight: bold;
+        font-family: "Courier New", Courier, monospace;
+        margin: 20px 0;
+        color: var(--primary-glow); /* Dùng biến màu */
+      }
+      .inputs {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      input {
+        width: 60px;
+        padding: 10px;
+        text-align: center;
+        border-radius: 5px;
+        border: none;
+        font-size: 1.2rem;
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--primary-glow);
+      }
+      .controls button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        margin: 0 5px;
+        transition: 0.2s;
+        color: white;
+      }
+      .btn-start {
+        background-color: #ffffff; /* Màu accent */
+        color: black;
+      }
+      .btn-pause {
+        background-color: #ffffff;
+        color: black;
+      }
+      .btn-reset {
+        background-color: #000000; /* Danger Glow */
+      }
+
+      button:hover {
+        opacity: 0.8;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html"><b>MUPCLOCK</b></a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">Trang chủ</a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle active"
+                href="#"
+                id="navbarDarkDropdownMenuLink"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Công cụ
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-dark"
+                aria-labelledby="navbarDarkDropdownMenuLink"
+              >
+                <li>
+                  <a class="dropdown-item" href="demnguoc.html">Đếm ngược</a>
+                </li>
+                <li><a class="dropdown-item" href="bamgio.html">Bấm giờ</a></li>
+                <li>
+                  <a class="dropdown-item" href="donghothegioi.html"
+                    >Giờ thế giới</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="dem-khoa/dem.html">Đếm ngày</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../cửa hàng/shop.html">Cửa Hàng</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../tài khoản/account.html">Tài khoản</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../liên hệ/contact.html">Liên hệ</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="content-center-wrapper">
+      <div class="timer-container">
+        <div class="inputs" id="input-area">
+          <input
+            type="number"
+            id="inp-hours"
+            placeholder="00"
+            min="0"
+            max="99"
+          />
+          :
+          <input
+            type="number"
+            id="inp-minutes"
+            placeholder="00"
+            min="0"
+            max="59"
+          />
+          :
+          <input
+            type="number"
+            id="inp-seconds"
+            placeholder="00"
+            min="0"
+            max="59"
+          />
+        </div>
+
+        <div class="display" id="timer-display">00:00:00</div>
+
+        <div class="controls">
+          <button class="btn-start" id="btn-start">Bắt đầu</button>
+          <button class="btn-pause" id="btn-pause" disabled>Tạm dừng</button>
+          <button class="btn-reset" id="btn-reset">Đặt lại</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // --- LOGIC CLASS (Giữ nguyên) ---
+      class CountdownTimer {
+        constructor({ onTick, onFinish }) {
+          this.onTick = onTick;
+          this.onFinish = onFinish;
+          this.interval = null;
+          this.remainingSeconds = 0;
+          this.isRunning = false;
+        }
+
+        start(seconds) {
+          if (this.isRunning) return;
+          if (seconds !== undefined) this.remainingSeconds = seconds;
+
+          this.isRunning = true;
+          this.update();
+          this.interval = setInterval(() => {
+            this.remainingSeconds--;
+            this.update();
+            if (this.remainingSeconds <= 0) {
+              this.stop();
+              if (this.onFinish) this.onFinish();
+            }
+          }, 1000);
+        }
+
+        pause() {
+          clearInterval(this.interval);
+          this.isRunning = false;
+        }
+
+        stop() {
+          clearInterval(this.interval);
+          this.interval = null;
+          this.isRunning = false;
+          this.remainingSeconds = 0;
+          this.update();
+        }
+
+        update() {
+          let t = Math.max(0, this.remainingSeconds);
+          const hours = Math.floor(t / 3600);
+          const minutes = Math.floor((t % 3600) / 60);
+          const seconds = t % 60;
+
+          if (this.onTick) {
+            this.onTick({
+              hours: this.format(hours),
+              minutes: this.format(minutes),
+              seconds: this.format(seconds),
+              totalSeconds: t,
+            });
+          }
+        }
+
+        format(num) {
+          return num.toString().padStart(2, "0");
+        }
+      }
+
+      // --- KẾT NỐI VỚI GIAO DIỆN HTML ---
+      const displayEl = document.getElementById("timer-display");
+      const btnStart = document.getElementById("btn-start");
+      const btnPause = document.getElementById("btn-pause");
+      const btnReset = document.getElementById("btn-reset");
+
+      // Khởi tạo đối tượng Timer
+      const myTimer = new CountdownTimer({
+        onTick: (time) => {
+          displayEl.innerText = `${time.hours}:${time.minutes}:${time.seconds}`;
+        },
+        onFinish: () => {
+          alert("Hết giờ rồi!");
+          btnStart.disabled = false;
+          btnPause.disabled = true;
+        },
+      });
+
+      // Xử lý nút BẮT ĐẦU
+      btnStart.addEventListener("click", () => {
+        const h = parseInt(document.getElementById("inp-hours").value) || 0;
+        const m = parseInt(document.getElementById("inp-minutes").value) || 0;
+        const s = parseInt(document.getElementById("inp-seconds").value) || 0;
+        const totalSeconds = h * 3600 + m * 60 + s;
+
+        if (totalSeconds > 0) {
+          if (btnStart.innerText === "Tiếp tục") {
+            myTimer.start();
+          } else {
+            myTimer.start(totalSeconds);
+          }
+          btnStart.disabled = true;
+          btnStart.innerText = "Tiếp tục";
+          btnPause.disabled = false;
+          document.getElementById("input-area").style.display = "none";
+          document.getElementById("timer-display").style.display = "block";
+        } else {
+          alert("Vui lòng nhập thời gian!");
+        }
+      });
+
+      // Xử lý nút TẠM DỪNG
+      btnPause.addEventListener("click", () => {
+        myTimer.pause();
+        btnStart.disabled = false;
+        btnPause.disabled = true;
+      });
+
+      // Xử lý nút ĐẶT LẠI (RESET)
+      btnReset.addEventListener("click", () => {
+        myTimer.stop();
+        document.getElementById("inp-hours").value = "";
+        document.getElementById("inp-minutes").value = "";
+        document.getElementById("inp-seconds").value = "";
+        btnStart.disabled = false;
+        btnStart.innerText = "Bắt đầu";
+        btnPause.disabled = true;
+        document.getElementById("input-area").style.display = "flex";
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="../theme-manager.js"></script>
+  </body>
+</html>
