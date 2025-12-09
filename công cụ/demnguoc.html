@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đếm Ngược - Công Cụ - MUPCLOCK</title>
+    <title>Đồng hồ đếm ngược Pro</title>
+
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -11,53 +12,123 @@
     <link rel="stylesheet" href="../themes.css" />
     <script src="../kiemdangnhap.js"></script>
 
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
-      * {
-        box-sizing: border-box;
-      }
       :root {
-        --ring-size: clamp(280px, 45vmin, 420px);
+        --text-color: var(--text, #e6eef8);
+        --accent-color: var(--accent, #38bdf8);
+        --glass-bg: var(--card, rgba(255, 255, 255, 0.05));
+        --glass-border: var(--glass-border, rgba(255, 255, 255, 0.1));
+        --glass-shadow: var(--glass-shadow, 0 8px 32px 0 rgba(0, 0, 0, 0.37));
       }
-      body {
-        --primary-glow: var(--reactor-primary);
-        --secondary-glow: var(--reactor-secondary);
-        --accent: var(--reactor-accent);
-        --danger-glow: var(--reactor-danger);
-        --bg: var(--reactor-bg);
-      }
+
       body {
         margin: 0;
-        background: var(--bg); /* <-- Quan trọng */
-        font-family: "Orbitron", sans-serif;
-        color: var(--primary-glow);
+        font-family: "Inter", sans-serif;
+        background-color: transparent;
+        color: var(--text-color);
         min-height: 100vh;
-        padding-top: 60px; /* Thêm padding-top để chừa chỗ cho Navbar */
-        /* Xóa thuộc tính display: flex, align-items: center, height: 100vh cũ */
+        padding-top: 60px;
+        user-select: none;
       }
 
-      /* Wrapper dùng để căn giữa nội dung còn lại */
-      .content-center-wrapper {
+      .content-wrapper {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
-        min-height: calc(100vh - 60px); /* Lấy hết không gian còn lại */
+        justify-content: center;
+        min-height: calc(100vh - 60px);
         width: 100%;
+        position: relative;
       }
 
-      /* Tweak các thành phần gốc của bạn (Giữ nguyên) */
+      /* Màn hình hiển thị giờ */
+      #timer-display {
+        font-family: "Orbitron", sans-serif;
+        font-size: 120px;
+        font-weight: 700;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        transition: color 0.2s;
+        cursor: pointer;
+        color: var(--rubik-idle, #e6eef8);
+      }
+
+      /* Các trạng thái màu sắc */
+      .state-idle {
+        color: var(--rubik-idle, #e6eef8) !important;
+      }
+      .state-holding {
+        color: var(--rubik-wait, #ff0000) !important;
+      }
+      .state-ready {
+        color: var(--rubik-ready, #00ff00) !important;
+        text-shadow: 0 0 30px var(--rubik-ready, #00ff00) !important;
+      }
+      .state-running {
+        color: var(--rubik-idle, #e6eef8) !important;
+      }
+
+      .instruction {
+        margin-top: 20px;
+        opacity: 0.6;
+        font-size: 14px;
+        letter-spacing: 1px;
+      }
+
+      .stats-panel {
+        margin-top: 50px;
+        background: var(--card, rgba(255, 255, 255, 0.05));
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+        width: 90%;
+        max-width: 600px;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+
+      .stat-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .btn-clear {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #aaa;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        margin-top: 10px;
+        transition: all 0.3s;
+      }
+      .btn-clear:hover {
+        background: rgba(255, 0, 0, 0.2);
+        color: white;
+        border-color: red;
+      }
+
+      /* Timer Container Styles (Đồng bộ với bamgio.html) */
       .timer-container {
         text-align: center;
-        background: #333;
+        background: var(--card, #333);
         padding: 30px;
         border-radius: 20px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
       }
       .display {
         font-size: 4rem;
         font-weight: bold;
         font-family: "Courier New", Courier, monospace;
         margin: 20px 0;
-        color: var(--primary-glow); /* Dùng biến màu */
+        color: var(--accent-color, #00d2ff);
       }
       .inputs {
         display: flex;
@@ -70,10 +141,10 @@
         padding: 10px;
         text-align: center;
         border-radius: 5px;
-        border: none;
+        border: 1px solid var(--glass-border, #444);
         font-size: 1.2rem;
         background: rgba(0, 0, 0, 0.3);
-        color: var(--primary-glow);
+        color: white;
       }
       .controls button {
         padding: 10px 20px;
@@ -83,20 +154,19 @@
         border-radius: 5px;
         margin: 0 5px;
         transition: 0.2s;
-        color: white;
       }
       .btn-start {
-        background-color: #ffffff; /* Màu accent */
+        background-color: var(--accent-color, #28a745);
         color: black;
       }
       .btn-pause {
-        background-color: #ffffff;
+        background-color: #ffc107;
         color: black;
       }
       .btn-reset {
-        background-color: #000000; /* Danger Glow */
+        background-color: #dc3545;
+        color: white;
       }
-
       button:hover {
         opacity: 0.8;
       }
@@ -104,13 +174,104 @@
         opacity: 0.5;
         cursor: not-allowed;
       }
+
+      @media (max-width: 600px) {
+        #timer-display {
+          font-size: 80px;
+        }
+      }
+      /* --- ALARM OVERLAY STYLES --- */
+      #alarm-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85); /* Nền tối mờ */
+        z-index: 9999; /* Luôn nằm trên cùng */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(5px);
+      }
+
+      /* Class để ẩn/hiện (Bootstrap có sẵn d-none, nhưng ta define lại cho chắc) */
+      .d-none {
+        display: none !important;
+      }
+
+      .alarm-box {
+        background: var(--glass-bg, rgba(20, 20, 30, 0.9));
+        border: 2px solid var(--accent-color, #38bdf8);
+        box-shadow: 0 0 50px var(--accent-color, #38bdf8);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        max-width: 90%;
+        width: 400px;
+        animation: shake 0.5s infinite; /* Hiệu ứng rung lắc */
+      }
+
+      .alarm-icon {
+        font-size: 80px;
+        margin-bottom: 20px;
+        animation: bell-ring 1s infinite ease-in-out;
+      }
+
+      .alarm-title {
+        font-family: "Orbitron", sans-serif;
+        font-size: 2.5rem;
+        color: var(--accent-color, #fff);
+        margin-bottom: 10px;
+        text-transform: uppercase;
+      }
+
+      .alarm-desc {
+        color: #ccc;
+        margin-bottom: 30px;
+      }
+
+      .btn-stop-alarm {
+        background: var(--danger-glow, #ff0055);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 0 20px var(--danger-glow, #ff0055);
+        transition: transform 0.2s;
+      }
+      .btn-stop-alarm:hover {
+        transform: scale(1.1);
+      }
+
+      /* Hiệu ứng rung chuông */
+      @keyframes bell-ring {
+        0%,
+        100% {
+          transform: rotate(0);
+        }
+        20% {
+          transform: rotate(-15deg);
+        }
+        40% {
+          transform: rotate(15deg);
+        }
+        60% {
+          transform: rotate(-10deg);
+        }
+        80% {
+          transform: rotate(10deg);
+        }
+      }
     </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
         <a class="navbar-brand" href="../index.html"><b>MUPCLOCK</b></a>
-
         <button
           class="navbar-toggler"
           type="button"
@@ -119,32 +280,26 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
               <a class="nav-link" href="../index.html">Trang chủ</a>
             </li>
-
             <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle active"
                 href="#"
-                id="navbarDarkDropdownMenuLink"
                 role="button"
                 data-bs-toggle="dropdown"
-                aria-expanded="false"
+                >Công cụ</a
               >
-                Công cụ
-              </a>
-              <ul
-                class="dropdown-menu dropdown-menu-dark"
-                aria-labelledby="navbarDarkDropdownMenuLink"
-              >
+              <ul class="dropdown-menu dropdown-menu-dark">
                 <li>
                   <a class="dropdown-item" href="demnguoc.html">Đếm ngược</a>
                 </li>
-                <li><a class="dropdown-item" href="bamgio.html">Bấm giờ</a></li>
+                <li>
+                  <a class="dropdown-item" href="bamgio.html">Bấm giờ</a>
+                </li>
                 <li>
                   <a class="dropdown-item" href="donghothegioi.html"
                     >Giờ thế giới</a
@@ -168,7 +323,8 @@
         </div>
       </div>
     </nav>
-    <div class="content-center-wrapper">
+
+    <div class="content-wrapper">
       <div class="timer-container">
         <div class="inputs" id="input-area">
           <input
@@ -206,9 +362,18 @@
       </div>
     </div>
 
-    <script>
-      // --- LOGIC CLASS (Giữ nguyên) ---
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="../theme-manager.js"></script>
+
+    <script type="module">
+      import { playAlarm } from "../sound-manager.js";
+
+      // Biến lưu nhạc đang phát để lát còn tắt
+      let currentAlarmAudio = null;
+
+      // --- LOGIC CLASS (Giữ nguyên phần đầu) ---
       class CountdownTimer {
+        // ... (constructor, start, pause, stop, update, format giữ nguyên) ...
         constructor({ onTick, onFinish }) {
           this.onTick = onTick;
           this.onFinish = onFinish;
@@ -217,10 +382,10 @@
           this.isRunning = false;
         }
 
+        // ... (copy lại các hàm start, pause, stop, update, format y hệt cũ) ...
         start(seconds) {
           if (this.isRunning) return;
           if (seconds !== undefined) this.remainingSeconds = seconds;
-
           this.isRunning = true;
           this.update();
           this.interval = setInterval(() => {
@@ -232,12 +397,10 @@
             }
           }, 1000);
         }
-
         pause() {
           clearInterval(this.interval);
           this.isRunning = false;
         }
-
         stop() {
           clearInterval(this.interval);
           this.interval = null;
@@ -245,46 +408,72 @@
           this.remainingSeconds = 0;
           this.update();
         }
-
         update() {
           let t = Math.max(0, this.remainingSeconds);
           const hours = Math.floor(t / 3600);
           const minutes = Math.floor((t % 3600) / 60);
           const seconds = t % 60;
-
-          if (this.onTick) {
+          if (this.onTick)
             this.onTick({
               hours: this.format(hours),
               minutes: this.format(minutes),
               seconds: this.format(seconds),
               totalSeconds: t,
             });
-          }
         }
-
         format(num) {
           return num.toString().padStart(2, "0");
         }
       }
 
-      // --- KẾT NỐI VỚI GIAO DIỆN HTML ---
+      // --- KẾT NỐI UI ---
       const displayEl = document.getElementById("timer-display");
       const btnStart = document.getElementById("btn-start");
       const btnPause = document.getElementById("btn-pause");
       const btnReset = document.getElementById("btn-reset");
 
-      // Khởi tạo đối tượng Timer
+      // UI Báo thức
+      const alarmOverlay = document.getElementById("alarm-overlay");
+      const btnStopAlarm = document.getElementById("btn-stop-alarm");
+
+      // Khởi tạo Timer
       const myTimer = new CountdownTimer({
         onTick: (time) => {
           displayEl.innerText = `${time.hours}:${time.minutes}:${time.seconds}`;
         },
+
+        // --- SỰ KIỆN KHI HẾT GIỜ (ĐÃ SỬA) ---
         onFinish: () => {
+          // 1. Phát nhạc & Bật chế độ lặp lại
+          currentAlarmAudio = playAlarm();
+          if (currentAlarmAudio) {
+            currentAlarmAudio.loop = true; // <-- Quan trọng: Nhạc kêu mãi không dứt
+          }
+
+          // 2. Hiện màn hình báo thức
+          alarmOverlay.classList.remove("d-none");
+
+          // 3. Reset giao diện nút bấm
           btnStart.disabled = false;
+          btnStart.innerText = "Bắt đầu";
           btnPause.disabled = true;
+          document.getElementById("input-area").style.display = "flex";
+          document.getElementById("timer-display").style.display = "block";
         },
       });
 
-      // Xử lý nút BẮT ĐẦU
+      // --- XỬ LÝ NÚT TẮT CHUÔNG ---
+      btnStopAlarm.addEventListener("click", () => {
+        // 1. Tắt nhạc
+        if (currentAlarmAudio) {
+          currentAlarmAudio.pause();
+          currentAlarmAudio.currentTime = 0;
+        }
+        // 2. Ẩn màn hình báo thức
+        alarmOverlay.classList.add("d-none");
+      });
+
+      // --- CÁC NÚT BẤM KHÁC (Giữ nguyên) ---
       btnStart.addEventListener("click", () => {
         const h = parseInt(document.getElementById("inp-hours").value) || 0;
         const m = parseInt(document.getElementById("inp-minutes").value) || 0;
@@ -307,27 +496,51 @@
         }
       });
 
-      // Xử lý nút TẠM DỪNG
       btnPause.addEventListener("click", () => {
         myTimer.pause();
         btnStart.disabled = false;
         btnPause.disabled = true;
       });
 
-      // Xử lý nút ĐẶT LẠI (RESET)
       btnReset.addEventListener("click", () => {
         myTimer.stop();
+        // Reset Inputs
         document.getElementById("inp-hours").value = "";
         document.getElementById("inp-minutes").value = "";
         document.getElementById("inp-seconds").value = "";
+        // Reset Buttons
         btnStart.disabled = false;
         btnStart.innerText = "Bắt đầu";
         btnPause.disabled = true;
+        // Show Inputs
         document.getElementById("input-area").style.display = "flex";
-      });
-    </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module" src="../theme-manager.js"></script>
+        // Đề phòng trường hợp đang kêu mà bấm Reset
+        if (currentAlarmAudio) currentAlarmAudio.pause();
+        alarmOverlay.classList.add("d-none");
+      });
+
+      // Fix Menu Mobile
+      document
+        .querySelectorAll(".dropdown-menu a.dropdown-item")
+        .forEach((link) => {
+          link.addEventListener("click", () => {
+            const navCollapse = document.getElementById("navbarNav");
+            if (navCollapse && navCollapse.classList.contains("show"))
+              navCollapse.classList.remove("show");
+          });
+        });
+    </script>
+    <div id="alarm-overlay" class="d-none">
+      <div class="alarm-box">
+        <div class="alarm-icon">🔔</div>
+        <h2 class="alarm-title">Time's up!</h2>
+        <p class="alarm-desc">Thời gian đếm ngược đã kết thúc.</p>
+
+        <button id="btn-stop-alarm" class="btn-stop-alarm">
+          🔕 TẮT CHUÔNG
+        </button>
+      </div>
+    </div>
   </body>
 </html>

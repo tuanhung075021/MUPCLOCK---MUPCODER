@@ -1,373 +1,375 @@
-class CountdownTimer {
-    constructor(targetDate, updateCallback, completeCallback) {
-        this.targetDate = new Date(targetDate).getTime();
-        this.updateCallback = updateCallback;
-        this.completeCallback = completeCallback;
-        this.interval = null;
-        this.isRunning = false;
-        this.totalDuration = 0;
-        this.startTime = new Date().getTime();
-    }
+// ============================================================
+// 1. IMPORT CÔNG CỤ
+// Lưu ý: Hãy chỉnh số lượng dấu ../ cho đúng với thư mục của bạn
+// Nếu file này ở: cong-cu/dem-khoa/script.js -> dùng ../../
+import { db, ref, set, get, remove } from "../../firebase-config.js";
+import { playAlarm } from "../../sound-manager.js";
 
-    start() {
-        if (this.isRunning) return;
-        
-        this.isRunning = true;
-        this.startTime = new Date().getTime();
-        this.totalDuration = this.targetDate - this.startTime;
-        
-        this.update(); // Cập nhật ngay lập tức
-        this.interval = setInterval(() => this.update(), 1000);
-        
-        console.log('Bộ đếm ngược đã bắt đầu');
-    }
+// Lấy thông tin người dùng
+const currentUser = localStorage.getItem("currentUser");
+const dbRef = currentUser
+  ? ref(db, `users/${currentUser}/tools/date_countdown`)
+  : null;
 
-    stop() {
-        if (!this.isRunning) return;
-        
-        this.isRunning = false;
-        clearInterval(this.interval);
-        this.interval = null;
-        
-        console.log('Bộ đếm ngược đã dừng');
-    }
-
-    reset() {
-        this.stop();
-        if (this.updateCallback) {
-            this.updateCallback({
-                days: 0,
-                hours: 0,
-                minutes: 0,
-                seconds: 0,
-                progress: 0,
-                expired: false,
-                status: 'reset'
-            });
-        }
-        
-        console.log('Bộ đếm ngược đã đặt lại');
-    }
-
-    update() {
-        const now = new Date().getTime();
-        const timeRemaining = this.targetDate - now;
-
-        if (timeRemaining <= 0) {
-            this.complete();
-            return;
-        }
-
-        // Tính toán thời gian
-        const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-        // Tính toán phần trăm
-        const progress = Math.max(0, Math.min(100, 
-            ((this.totalDuration - timeRemaining) / this.totalDuration * 100)
-        ));
-
-        // Gọi callback để cập nhật UI
-        if (this.updateCallback) {
-            this.updateCallback({
-                days: days,
-                hours: hours,
-                minutes: minutes,
-                seconds: seconds,
-                progress: progress,
-                expired: false,
-                status: 'running'
-            });
-        }
-    }
-
-    complete() {
-        this.stop();
-        
-        if (this.completeCallback) {
-            this.completeCallback();
-        }
-        
-        if (this.updateCallback) {
-            this.updateCallback({
-                days: 0,
-                hours: 0,
-                minutes: 0,
-                seconds: 0,
-                progress: 100,
-                expired: true,
-                status: 'completed'
-            });
-        }
-        
-        console.log('Bộ đếm ngược đã hoàn thành');
-    }
-
-    getRemainingTime() {
-        const now = new Date().getTime();
-        const timeRemaining = this.targetDate - now;
-
-        if (timeRemaining <= 0) {
-            return { expired: true };
-        }
-
-        const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-        return {
-            days: days,
-            hours: hours,
-            minutes: minutes,
-            seconds: seconds,
-            expired: false
-        };
-    }
-}
-
-// Khởi tạo ứng dụng
+// Biến lưu nhạc để tắt
+let currentAlarmAudio = null;
 let countdownTimer = null;
 
-// DOM Elements
-const targetDateInput = document.getElementById('target-date');
-const startBtn = document.getElementById('start-btn');
-const stopBtn = document.getElementById('stop-btn');
-const resetBtn = document.getElementById('reset-btn');
-const presetButtons = document.querySelectorAll('.btn-preset');
-const countdownDisplay = document.getElementById('countdown-display');
+// ============================================================
+// 2. KẾT NỐI GIAO DIỆN (DOM ELEMENTS)
+// ============================================================
+const targetDateInput = document.getElementById("target-date");
+const startBtn = document.getElementById("start-btn");
+const stopBtn = document.getElementById("stop-btn");
+const resetBtn = document.getElementById("reset-btn");
+const presetButtons = document.querySelectorAll(".btn-preset");
 
-// Cập nhật UI
-function updateUI(data) {
-    // Cập nhật các số
-    document.getElementById('days').textContent = formatNumber(data.days);
-    document.getElementById('hours').textContent = formatNumber(data.hours);
-    document.getElementById('minutes').textContent = formatNumber(data.minutes);
-    document.getElementById('seconds').textContent = formatNumber(data.seconds);
-    
-    // Cập nhật progress bar
-    const progressFill = document.getElementById('progress-fill');
-    const progressText = document.getElementById('progress-text');
-    progressFill.style.width = `${data.progress}%`;
-    progressText.textContent = `${Math.round(data.progress)}%`;
-    
-    // Cập nhật thông tin
-    document.getElementById('time-remaining-display').textContent = 
-        `${data.days} ngày ${data.hours} giờ ${data.minutes} phút`;
-    
-    document.getElementById('status-display').textContent = 
-        data.expired ? 'Đã hoàn thành' : 'Đang chạy';
-    
-    // Cập nhật display chính
-    if (data.expired) {
-        countdownDisplay.innerHTML = `
-            <div class="completed-message">
-                <i class="fas fa-check-circle" style="font-size: 3em; color: #4CAF50; margin-bottom: 20px;"></i>
-                <h2 style="color: white; margin-bottom: 10px;">ĐẾM NGƯỢC ĐÃ HOÀN THÀNH!</h2>
-                <p style="color: #bdc3c7;">Đã đến thời điểm mục tiêu!</p>
-            </div>
-        `;
-        document.getElementById('status-display').textContent = 'Đã hoàn thành';
-    }
-}
+// Các thẻ hiển thị (Đảm bảo ID trong HTML trùng khớp)
+const daysEl = document.getElementById("days");
+const hoursEl = document.getElementById("hours");
+const minutesEl = document.getElementById("minutes");
+const secondsEl = document.getElementById("seconds");
+const progressFill = document.getElementById("progress-fill");
+const progressText = document.getElementById("progress-text");
+const timeRemainingEl = document.getElementById("time-remaining-display");
+const statusDisplayEl = document.getElementById("status-display");
+const targetDisplayEl = document.getElementById("target-date-display");
 
-// Format số với 2 chữ số
-function formatNumber(num) {
-    return num < 10 ? `0${num}` : num.toString();
-}
+// UI Báo thức (Overlay)
+const uiOverlay = document.getElementById("alarm-overlay");
+const btnStopAlarm = document.getElementById("btn-stop-alarm");
 
-// Format ngày tháng
-function formatDate(date) {
-    return new Date(date).toLocaleString('vi-VN', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
+// ============================================================
+// 3. LOGIC ĐẾM NGƯỢC (CLASS)
+// ============================================================
+class CountdownTimer {
+  constructor(targetDate, updateCallback, completeCallback) {
+    this.targetDate = new Date(targetDate).getTime();
+    this.updateCallback = updateCallback;
+    this.completeCallback = completeCallback;
+    this.interval = null;
+    this.isRunning = false;
+    this.totalDuration = 0;
+    this.startTime = new Date().getTime();
+  }
 
-// Xử lý sự kiện bắt đầu
-startBtn.addEventListener('click', () => {
-    const targetDate = targetDateInput.value;
-    
-    if (!targetDate) {
-        alert('Vui lòng chọn ngày mục tiêu!');
-        return;
-    }
-    
-    if (new Date(targetDate) <= new Date()) {
-        alert('Ngày mục tiêu phải ở tương lai!');
-        return;
-    }
-    
-    // Dừng timer cũ nếu có
-    if (countdownTimer) {
-        countdownTimer.stop();
-    }
-    
-    // Tạo timer mới
-    countdownTimer = new CountdownTimer(
-        targetDate,
-        updateUI,
-        () => {
-            console.log('Đếm ngược hoàn thành!');
-            // Có thể thêm hiệu ứng hoặc âm thanh tại đây
-            playCompletionSound();
-        }
-    );
-    
-    // Cập nhật thông tin ngày mục tiêu
-    document.getElementById('target-date-display').textContent = formatDate(targetDate);
-    document.getElementById('status-display').textContent = 'Đang chạy';
-    
-    // Bắt đầu đếm ngược
-    countdownTimer.start();
-    
-    // Thay đổi nội dung display
-    countdownDisplay.innerHTML = `
-        <div class="running-message">
-            <i class="fas fa-hourglass-half" style="font-size: 3em; color: #6a11cb; margin-bottom: 20px;"></i>
-            <h3 style="color: white; margin-bottom: 10px;">ĐANG ĐẾM NGƯỢC...</h3>
-            <p style="color: #bdc3c7;">Hãy theo dõi tiến trình bên dưới</p>
-        </div>
-    `;
-});
+  // Nhận savedStartTime để hồi phục khi tải lại trang
+  start(savedStartTime = null) {
+    if (this.isRunning) return;
 
-// Xử lý sự kiện dừng
-stopBtn.addEventListener('click', () => {
-    if (countdownTimer && countdownTimer.isRunning) {
-        countdownTimer.stop();
-        document.getElementById('status-display').textContent = 'Đã dừng';
-        
-        countdownDisplay.innerHTML = `
-            <div class="paused-message">
-                <i class="fas fa-pause-circle" style="font-size: 3em; color: #FF9800; margin-bottom: 20px;"></i>
-                <h3 style="color: white; margin-bottom: 10px;">ĐÃ DỪNG</h3>
-                <p style="color: #bdc3c7;">Bấm "Bắt đầu" để tiếp tục</p>
-            </div>
-        `;
-    }
-});
+    this.isRunning = true;
+    this.startTime = savedStartTime || new Date().getTime();
+    this.totalDuration = this.targetDate - this.startTime;
 
-// Xử lý sự kiện reset
-resetBtn.addEventListener('click', () => {
-    if (countdownTimer) {
-        countdownTimer.reset();
-    }
-    
-    // Reset UI
-    updateUI({
+    this.update();
+    this.interval = setInterval(() => this.update(), 1000);
+    console.log("Bộ đếm ngược đã bắt đầu");
+  }
+
+  stop() {
+    if (!this.isRunning) return;
+    this.isRunning = false;
+    clearInterval(this.interval);
+    this.interval = null;
+    console.log("Bộ đếm ngược đã dừng");
+  }
+
+  reset() {
+    this.stop();
+    if (this.updateCallback) {
+      this.updateCallback({
         days: 0,
         hours: 0,
         minutes: 0,
         seconds: 0,
         progress: 0,
         expired: false,
-        status: 'reset'
-    });
-    
-    document.getElementById('target-date-display').textContent = 'Chưa chọn';
-    document.getElementById('time-remaining-display').textContent = '--';
-    document.getElementById('status-display').textContent = 'Chưa bắt đầu';
-    
-    countdownDisplay.innerHTML = `
-        <div class="initial-message">
-            <i class="fas fa-hourglass-start"></i>
-            <p>Chọn ngày và bấm "Bắt đầu" để bắt đầu đếm ngược</p>
-        </div>
-    `;
-});
-
-// Xử lý các nút preset
-presetButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const now = new Date();
-        const hours = button.getAttribute('data-hours');
-        const days = button.getAttribute('data-days');
-        
-        if (hours) {
-            now.setHours(now.getHours() + parseInt(hours));
-        } else if (days) {
-            now.setDate(now.getDate() + parseInt(days));
-        }
-        
-        // Format date cho input datetime-local
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        const hoursStr = String(now.getHours()).padStart(2, '0');
-        const minutesStr = String(now.getMinutes()).padStart(2, '0');
-        
-        targetDateInput.value = `${year}-${month}-${day}T${hoursStr}:${minutesStr}`;
-    });
-});
-
-// Đặt ngày mặc định (ngày mai)
-const tomorrow = new Date();
-tomorrow.setDate(tomorrow.getDate() + 1);
-tomorrow.setHours(23, 59, 0, 0);
-
-const year = tomorrow.getFullYear();
-const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
-const day = String(tomorrow.getDate()).padStart(2, '0');
-const hours = String(tomorrow.getHours()).padStart(2, '0');
-const minutes = String(tomorrow.getMinutes()).padStart(2, '0');
-
-targetDateInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-
-// Hàm phát âm thanh khi hoàn thành
-function playCompletionSound() {
-    // Tạo âm thanh đơn giản bằng Web Audio API
-    try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.value = 800;
-        oscillator.type = 'sine';
-        
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 1);
-    } catch (e) {
-        console.log('Không thể phát âm thanh:', e);
+        status: "reset",
+      });
     }
+  }
+
+  update() {
+    const now = new Date().getTime();
+    const timeRemaining = this.targetDate - now;
+
+    if (timeRemaining <= 0) {
+      this.complete();
+      return;
+    }
+
+    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(
+      (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const minutes = Math.floor(
+      (timeRemaining % (1000 * 60 * 60)) / (1000 * 60)
+    );
+    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+    let progress = 0;
+    if (this.totalDuration > 0) {
+      progress = Math.max(
+        0,
+        Math.min(
+          100,
+          ((this.totalDuration - timeRemaining) / this.totalDuration) * 100
+        )
+      );
+    }
+
+    if (this.updateCallback) {
+      this.updateCallback({
+        days,
+        hours,
+        minutes,
+        seconds,
+        progress,
+        expired: false,
+        status: "running",
+      });
+    }
+  }
+
+  complete() {
+    this.stop();
+    if (this.completeCallback) this.completeCallback();
+    if (this.updateCallback) {
+      this.updateCallback({
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        progress: 100,
+        expired: true,
+        status: "completed",
+      });
+    }
+  }
 }
 
-// Thêm hiệu ứng cho các số
-function animateNumber(element, newValue) {
-    const oldValue = parseInt(element.textContent);
-    const difference = newValue - oldValue;
-    
-    if (difference === 0) return;
-    
-    element.style.transform = 'scale(1.2)';
-    element.style.color = '#6a11cb';
-    
-    setTimeout(() => {
-        element.style.transform = 'scale(1)';
-        element.style.color = '#2c3e50';
-    }, 300);
+// ============================================================
+// 4. CÁC HÀM HỖ TRỢ & UPDATE UI
+// ============================================================
+const pad = (n) => (n < 10 ? "0" + n : n);
+const formatNumber = (num) => pad(num);
+const formatInputDate = (d) =>
+  `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(
+    d.getHours()
+  )}:${pad(d.getMinutes())}`;
+
+function updateUI(data) {
+  // Kiểm tra nếu các thẻ tồn tại mới gán giá trị (Tránh lỗi null)
+  if (daysEl) daysEl.textContent = formatNumber(data.days);
+  if (hoursEl) hoursEl.textContent = formatNumber(data.hours);
+  if (minutesEl) minutesEl.textContent = formatNumber(data.minutes);
+  if (secondsEl) secondsEl.textContent = formatNumber(data.seconds);
+
+  if (progressFill) progressFill.style.width = `${data.progress}%`;
+  if (progressText) progressText.textContent = `${Math.round(data.progress)}%`;
+
+  if (data.expired) {
+    if (timeRemainingEl) timeRemainingEl.textContent = "00:00:00";
+    if (statusDisplayEl) statusDisplayEl.textContent = "Đã hoàn thành";
+  } else if (data.status !== "reset") {
+    if (timeRemainingEl)
+      timeRemainingEl.textContent = `${data.days}d ${data.hours}h ${data.minutes}m`;
+    if (statusDisplayEl) statusDisplayEl.textContent = "Đang chạy";
+  } else {
+    if (timeRemainingEl) timeRemainingEl.textContent = "--";
+    if (statusDisplayEl) statusDisplayEl.textContent = "Chưa bắt đầu";
+  }
 }
 
-// Khởi tạo UI ban đầu
-updateUI({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    progress: 0,
-    expired: false,
-    status: 'initial'
+// ============================================================
+// 5. XỬ LÝ SỰ KIỆN NÚT BẤM
+// ============================================================
+
+// --- NÚT BẮT ĐẦU ---
+if (startBtn) {
+  startBtn.addEventListener("click", () => {
+    const targetDateVal = targetDateInput.value;
+    if (!targetDateVal) return alert("Vui lòng chọn ngày mục tiêu!");
+
+    const targetTime = new Date(targetDateVal).getTime();
+    const startTime = Date.now();
+
+    if (targetTime <= startTime) return alert("Ngày phải ở tương lai!");
+
+    if (countdownTimer) countdownTimer.stop();
+
+    // Tạo Timer mới
+    countdownTimer = new CountdownTimer(targetDateVal, updateUI, () => {
+      // KHI HẾT GIỜ:
+      console.log("Đếm ngược hoàn thành!");
+
+      // 1. Phát nhạc
+      currentAlarmAudio = playAlarm();
+      if (currentAlarmAudio) currentAlarmAudio.loop = true;
+
+      // 2. Hiện Overlay
+      if (uiOverlay) uiOverlay.classList.remove("d-none");
+
+      // 3. Xóa trên mây
+      if (dbRef) remove(dbRef);
+    });
+
+    if (targetDisplayEl)
+      targetDisplayEl.textContent = new Date(targetDateVal).toLocaleString(
+        "vi-VN"
+      );
+
+    // Chạy đồng hồ
+    countdownTimer.start(startTime);
+
+    // --- LƯU LÊN FIREBASE ---
+    if (dbRef) {
+      set(dbRef, {
+        target: targetTime,
+        start: startTime,
+        dateString: targetDateVal,
+      }).then(() => console.log("Đã lưu lên mây"));
+    }
+  });
+}
+
+// --- NÚT DỪNG ---
+if (stopBtn) {
+  stopBtn.addEventListener("click", () => {
+    if (countdownTimer && countdownTimer.isRunning) {
+      countdownTimer.stop();
+      if (statusDisplayEl) statusDisplayEl.textContent = "Đã dừng";
+    }
+  });
+}
+
+// --- NÚT RESET ---
+if (resetBtn) {
+  resetBtn.addEventListener("click", () => {
+    if (countdownTimer) countdownTimer.reset();
+
+    // Xóa trên Firebase
+    if (dbRef) remove(dbRef);
+
+    // Tắt nhạc & Ẩn Overlay
+    if (currentAlarmAudio) {
+      currentAlarmAudio.pause();
+      currentAlarmAudio.currentTime = 0;
+    }
+    if (uiOverlay) uiOverlay.classList.add("d-none");
+
+    // Reset UI
+    updateUI({
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+      progress: 0,
+      expired: false,
+      status: "reset",
+    });
+    if (targetDisplayEl) targetDisplayEl.textContent = "Chưa chọn";
+
+    // Đặt lại ngày mặc định
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + 5);
+    targetDateInput.value = formatInputDate(now);
+  });
+}
+
+// --- NÚT TẮT CHUÔNG (Overlay) ---
+if (btnStopAlarm) {
+  btnStopAlarm.addEventListener("click", () => {
+    if (currentAlarmAudio) {
+      currentAlarmAudio.pause();
+      currentAlarmAudio.currentTime = 0;
+    }
+    if (uiOverlay) uiOverlay.classList.add("d-none");
+  });
+}
+
+// --- CÁC NÚT CHỌN NHANH ---
+presetButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const now = new Date();
+    const hours = button.getAttribute("data-hours");
+    const days = button.getAttribute("data-days");
+
+    if (hours) now.setHours(now.getHours() + parseInt(hours));
+    else if (days) now.setDate(now.getDate() + parseInt(days));
+
+    targetDateInput.value = formatInputDate(now);
+  });
 });
 
-console.log('Ứng dụng đồng hồ đếm ngược đã sẵn sàng!');
+// ============================================================
+// 6. TÍNH NĂNG TỰ ĐỘNG TẢI TỪ FIREBASE (CHẠY NỀN)
+// ============================================================
+function loadFromFirebase() {
+  if (!dbRef) return;
+
+  get(dbRef)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        if (data.target > Date.now()) {
+          // Khôi phục
+          targetDateInput.value = data.dateString;
+          if (targetDisplayEl)
+            targetDisplayEl.textContent = new Date(
+              data.dateString
+            ).toLocaleString("vi-VN");
+          if (statusDisplayEl)
+            statusDisplayEl.textContent = "Đang chạy (Đồng bộ)";
+
+          if (countdownTimer) countdownTimer.stop();
+
+          countdownTimer = new CountdownTimer(data.dateString, updateUI, () => {
+            // Hết giờ
+            currentAlarmAudio = playAlarm();
+            if (currentAlarmAudio) currentAlarmAudio.loop = true;
+            if (uiOverlay) uiOverlay.classList.remove("d-none");
+            remove(dbRef);
+          });
+
+          // CHẠY TIẾP TỪ MỐC CŨ
+          countdownTimer.start(data.start);
+        } else {
+          // Đã hết giờ lúc tắt máy -> Hiện thông báo
+          remove(dbRef);
+          updateUI({
+            days: 0,
+            hours: 0,
+            minutes: 0,
+            seconds: 0,
+            progress: 100,
+            expired: true,
+            status: "completed",
+          });
+          if (uiOverlay) {
+            uiOverlay.classList.remove("d-none");
+            // Có thể đổi text trong overlay thành "ĐÃ KẾT THÚC KHI VẮNG MẶT"
+          }
+        }
+      }
+    })
+    .catch(console.error);
+}
+
+// --- KHỞI CHẠY ---
+const now = new Date();
+now.setMinutes(now.getMinutes() + 5);
+targetDateInput.value = formatInputDate(now);
+
+updateUI({
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0,
+  progress: 0,
+  expired: false,
+  status: "initial",
+});
+loadFromFirebase(); // Tự động kiểm tra Firebase
+
+console.log("Ứng dụng đồng hồ đếm ngày đã sẵn sàng!");

@@ -13,6 +13,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+
     <link rel="stylesheet" href="../../themes.css" />
     <script src="../../kiemdangnhap.js"></script>
 
@@ -33,16 +34,13 @@
       body {
         margin: 0;
         font-family: "Inter", sans-serif;
-
-        /* QUAN TRỌNG: Để nền trong suốt để ăn theo Theme */
         background-color: transparent;
         color: var(--text-color);
-
         min-height: 100vh;
-        padding-top: 60px; /* Chừa chỗ cho Navbar */
+        padding-top: 60px;
+        margin: 0;
       }
 
-      /* Wrapper căn giữa (Giống file mẫu) */
       .content-wrapper {
         display: flex;
         flex-direction: column;
@@ -53,16 +51,17 @@
         margin: 0 auto;
       }
 
-      /* --- CÁC KHỐI GIAO DIỆN --- */
-
       header {
         text-align: center;
         margin-bottom: 30px;
       }
-
+      header h1 {
+        color: var(--accent-color);
+        font-weight: 700;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      }
       .subtitle {
         opacity: 0.7;
-        font-size: 0.9rem;
       }
 
       /* Khung kính (Glass Cards) */
@@ -72,7 +71,6 @@
         box-shadow: var(--glass-shadow);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-
         border-radius: 16px;
         padding: 25px;
         width: 100%;
@@ -104,8 +102,17 @@
         border-radius: 8px;
         font-weight: 600;
         padding: 10px 20px;
-        cursor: pointer;
-        transition: 0.2s;
+        transition: all 0.3s;
+      }
+
+      .btn-primary {
+        background-color: var(--accent-color);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #000;
+      }
+      .btn-primary:hover {
+        opacity: 0.9;
+        box-shadow: 0 0 15px var(--accent-color);
       }
 
       .preset-buttons {
@@ -116,11 +123,32 @@
         flex-wrap: wrap;
       }
       .btn-preset {
-        font-size: 12px;
-        padding: 6px 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--glass-border);
+        color: var(--text-color);
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .btn-preset:hover {
+        background: var(--accent-color);
+        color: #000;
       }
 
-      /* HIỂN THỊ THỜI GIAN (Dùng font Orbitron giống mẫu) */
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text-color);
+        border: 1px solid var(--glass-border);
+      }
+      .btn-danger {
+        background: #ff4757;
+        color: white;
+        border: none;
+      }
+
+      /* HIỂN THỊ THỜI GIAN */
       .time-display {
         display: flex;
         justify-content: center;
@@ -133,16 +161,14 @@
         text-align: center;
         min-width: 80px;
       }
-
       .unit-number {
-        font-family: "Orbitron", sans-serif; /* Font số điện tử */
+        font-family: "Orbitron", sans-serif;
         font-size: 3.5rem;
         font-weight: 700;
-
+        color: var(--accent-color);
         text-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         line-height: 1;
       }
-
       .unit-label {
         font-size: 0.8rem;
         opacity: 0.7;
@@ -150,7 +176,6 @@
         margin-top: 5px;
         letter-spacing: 1px;
       }
-
       .separator {
         font-family: "Orbitron", sans-serif;
         font-size: 2.5rem;
@@ -183,7 +208,7 @@
         box-shadow: 0 0 10px var(--accent-color);
       }
 
-      /* THÔNG TIN CHI TIẾT */
+      /* INFO PANEL */
       .info-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -214,6 +239,80 @@
         }
         .unit-number {
           font-size: 2.2rem;
+        }
+      }
+
+      /* ====================================================== 
+         THÊM CSS CHO PHẦN BÁO THỨC (OVERLAY) Ở DƯỚI ĐÂY 
+      ====================================================== */
+      #alarm-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(8px);
+      }
+
+      .d-none {
+        display: none !important;
+      }
+
+      .alarm-box {
+        background: var(--glass-bg);
+        border: 2px solid var(--accent-color);
+        box-shadow: 0 0 50px var(--accent-color);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        width: 90%;
+        max-width: 400px;
+        animation: shake 0.5s infinite;
+      }
+
+      .alarm-icon {
+        font-size: 80px;
+        margin-bottom: 20px;
+        animation: bell-ring 1s infinite ease-in-out;
+      }
+
+      .btn-stop-alarm {
+        background: #ff4757;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 0 20px #ff4757;
+        margin-top: 20px;
+      }
+      .btn-stop-alarm:hover {
+        transform: scale(1.1);
+      }
+
+      @keyframes bell-ring {
+        0%,
+        100% {
+          transform: rotate(0);
+        }
+        20% {
+          transform: rotate(-15deg);
+        }
+        40% {
+          transform: rotate(15deg);
+        }
+        60% {
+          transform: rotate(-10deg);
+        }
+        80% {
+          transform: rotate(10deg);
         }
       }
     </style>
@@ -259,7 +358,7 @@
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="../../cửa hàng/shop.html">Cửa hàng</a>
+              <a class="nav-link" href="../../cửa hàng/shop.html">Cửa Hàng</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="../../tài khoản/account.html"
@@ -344,11 +443,7 @@
             <h3>Mục tiêu</h3>
             <p id="target-date-display">--/--/----</p>
           </div>
-          <div class="info-item">
-            <i class="fas fa-hourglass-half"></i>
-            <h3>Còn lại</h3>
-            <p id="time-remaining-display">--</p>
-          </div>
+
           <div class="info-item">
             <i class="fas fa-info-circle"></i>
             <h3>Trạng thái</h3>
@@ -358,7 +453,22 @@
       </div>
     </div>
 
-    <script src="script.js"></script>
+    <div id="alarm-overlay" class="d-none">
+      <div class="alarm-box">
+        <div class="alarm-icon">🎉</div>
+        <h2 style="color: white; font-weight: bold; margin-bottom: 10px">
+          ĐÃ ĐẾN NGÀY!
+        </h2>
+        <p style="color: #ccc; margin-bottom: 30px">
+          Sự kiện mục tiêu đã diễn ra.
+        </p>
+        <button id="btn-stop-alarm" class="btn-stop-alarm">
+          🔕 TẮT CHUÔNG
+        </button>
+      </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="../../theme-manager.js"></script>
 

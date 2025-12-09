@@ -1,6 +1,6 @@
 // File này chuyên dùng để bảo vệ các trang nội bộ (App, Shop, Account...)
 
-const TIMEOUT_LIMIT = 30 * 60 * 1000; // 5 giây (Test xong nhớ sửa thành 30*60*1000)
+const TIMEOUT_LIMIT = 60 * 60 * 1000;
 
 // 1. Hàm kiểm tra đăng nhập (Chưa đăng nhập thì đuổi ra)
 function checkAuth() {
@@ -8,7 +8,7 @@ function checkAuth() {
   if (!user) {
     alert("Vui lòng đăng nhập để truy cập!");
     window.location.href = "login.html";
-    return false; // Dừng lại, không cho chạy tiếp
+    return false;
   }
   return true;
 }
@@ -45,7 +45,7 @@ function logout() {
 // Chỉ chạy nếu đang KHÔNG ở trang login hoặc index (đề phòng nhúng nhầm)
 const currentPage = window.location.pathname;
 if (
-  !currentPage.includes("login.html") &&
+  !currentPage.includes("đăng nhập/login.html") &&
   !currentPage.includes("index.html")
 ) {
   // Kiểm tra vé vào cửa ngay lập tức

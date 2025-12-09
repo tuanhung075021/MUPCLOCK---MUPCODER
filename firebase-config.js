@@ -1,4 +1,4 @@
-// 1. Import thư viện (Thêm 'update' vào danh sách này)
+// 1. Import thư viện (Thêm 'remove' vào danh sách này)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import {
   getDatabase,
@@ -6,12 +6,12 @@ import {
   set,
   get,
   child,
-  update, // <-- QUAN TRỌNG: Phải có chữ này ở đây
+  update,
+  remove, // <--- BỔ SUNG THÊM CÁI NÀY
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-// 2. Cấu hình (Giữ nguyên code của bạn)
+// 2. Cấu hình (Giữ nguyên của bạn)
 const firebaseConfig = {
-  // ... (đoạn mã apiKey, databaseURL của bạn giữ nguyên) ...
   apiKey: "AIzaSyCm2az1msLlIbfh2RC7zBl8tbsCR92Ysnc",
   authDomain: "mupclock-mupcoder.firebaseapp.com",
   databaseURL: "https://mupclock-mupcoder-default-rtdb.firebaseio.com",
@@ -26,5 +26,5 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// 4. Xuất khẩu (Thêm 'update' vào đây nữa)
-export { db, ref, set, get, child, update }; // <-- QUAN TRỌNG: Phải có chữ này ở đây
+// 4. Xuất khẩu (Thêm 'remove' vào đây nữa để các file khác dùng được)
+export { db, ref, set, get, child, update, remove };
