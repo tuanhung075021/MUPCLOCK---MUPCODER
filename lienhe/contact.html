@@ -557,13 +557,8 @@
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
 
-        // --- THAY LINK CỦA BẠN VÀO ĐÂY ---
         const SCRIPT_URL =
           "https://script.google.com/macros/s/AKfycbxuQHACg0RNl1J7XRmc2M_4spd28T_663Udn-AswC5cSugE_ZPLMZEtkXaz4QwMh5n2/exec";
-
-        // Gửi dữ liệu (Dùng fetch với mode 'no-cors' để tránh lỗi chặn,
-        // tuy nhiên cách này không nhận được phản hồi JSON, nhưng vẫn gửi được)
-        // Cách tốt nhất là dùng thư viện hoặc form chuẩn, nhưng ở đây ta dùng fetch đơn giản:
 
         fetch(SCRIPT_URL, {
           method: "POST",
