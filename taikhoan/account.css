@@ -1,4 +1,7 @@
-/* --- CSS CHO TRANG TÀI KHOẢN --- */
+body {
+  min-height: 100vh;
+  padding-top: 80px;
+}
 .avatar-container {
   position: relative;
   width: 150px;

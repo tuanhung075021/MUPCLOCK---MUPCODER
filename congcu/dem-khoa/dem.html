@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đồng hồ đếm ngày</title>
+    <title>Đếm ngày - Công cụ - MUPCLOCK</title>
 
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
@@ -58,6 +58,7 @@
         color: var(--accent-color);
         font-weight: 700;
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        font-size: 2.5rem; /* Cỡ chữ mặc định */
       }
       .subtitle {
         opacity: 0.7;
@@ -95,13 +96,16 @@
         font-size: 16px;
         color-scheme: dark;
         outline: none;
+        max-width: 100%; /* Đảm bảo không tràn màn hình */
       }
 
       .btn {
         border-radius: 8px;
         font-weight: 600;
         padding: 10px 20px;
+        cursor: pointer;
         transition: all 0.3s;
+        white-space: nowrap; /* Giữ chữ trên 1 dòng */
       }
 
       .btn-primary {
@@ -125,9 +129,9 @@
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid var(--glass-border);
         color: var(--text-color);
-        padding: 5px 15px;
+        padding: 6px 12px;
         border-radius: 20px;
-        font-size: 14px;
+        font-size: 12px;
         cursor: pointer;
         transition: 0.3s;
       }
@@ -223,27 +227,73 @@
         font-size: 1.1rem;
         font-weight: bold;
         margin: 0;
+        word-break: break-word; /* Tránh tràn chữ dài */
       }
       .info-item i {
         font-size: 1.5rem;
         color: var(--accent-color);
       }
 
-      @media (max-width: 600px) {
+      /* === CSS RESPONSIVE (ĐÃ TỐI ƯU CHO MOBILE) === */
+      @media (max-width: 768px) {
+        /* 1. Header nhỏ lại */
+        header h1 {
+          font-size: 1.8rem;
+        }
+
+        /* 2. Phần Control Group (Input & 3 Nút) */
+        .control-group {
+          flex-direction: column; /* Xếp dọc trên mobile */
+          width: 100%;
+        }
+
+        /* Input ngày giờ full chiều rộng */
+        input[type="datetime-local"] {
+          width: 100%;
+          margin-bottom: 10px;
+        }
+
+        /* Container chứa 3 nút bấm */
+        .control-buttons-wrapper {
+          display: flex;
+          width: 100%;
+          gap: 10px;
+        }
+
+        /* 3 nút bấm chia đều nhau */
+        .control-buttons-wrapper .btn {
+          flex: 1; /* Mỗi nút chiếm 1 phần bằng nhau */
+          padding: 10px 5px; /* Giảm padding ngang để đỡ chật */
+          font-size: 0.9rem;
+        }
+
+        /* 3. Hiển thị thời gian */
         .separator {
-          display: none;
+          display: none; /* Ẩn dấu : trên mobile */
         }
         .time-display {
           gap: 10px;
         }
+        .time-unit {
+          min-width: 60px; /* Thu nhỏ ô số */
+        }
         .unit-number {
-          font-size: 2.2rem;
+          font-size: 2rem; /* Giảm cỡ số */
+        }
+
+        /* 4. Các nút preset (+1h...) */
+        .preset-buttons {
+          display: grid;
+          grid-template-columns: 1fr 1fr; /* Chia thành 2 cột */
+          width: 100%;
+        }
+        .btn-preset {
+          width: 100%;
+          text-align: center;
         }
       }
 
-      /* ====================================================== 
-         THÊM CSS CHO PHẦN BÁO THỨC (OVERLAY) Ở DƯỚI ĐÂY 
-      ====================================================== */
+      /* Overlay Báo Thức */
       #alarm-overlay {
         position: fixed;
         top: 0;
@@ -256,12 +306,11 @@
         justify-content: center;
         align-items: center;
         backdrop-filter: blur(8px);
+        padding: 20px;
       }
-
       .d-none {
         display: none !important;
       }
-
       .alarm-box {
         background: var(--glass-bg);
         border: 2px solid var(--accent-color);
@@ -269,17 +318,15 @@
         border-radius: 20px;
         padding: 40px;
         text-align: center;
-        width: 90%;
+        width: 100%;
         max-width: 400px;
         animation: shake 0.5s infinite;
       }
-
       .alarm-icon {
         font-size: 80px;
         margin-bottom: 20px;
         animation: bell-ring 1s infinite ease-in-out;
       }
-
       .btn-stop-alarm {
         background: #ff4757;
         color: white;
@@ -291,11 +338,8 @@
         cursor: pointer;
         box-shadow: 0 0 20px #ff4757;
         margin-top: 20px;
+        width: 100%;
       }
-      .btn-stop-alarm:hover {
-        transform: scale(1.1);
-      }
-
       @keyframes bell-ring {
         0%,
         100% {
@@ -312,6 +356,53 @@
         }
         80% {
           transform: rotate(10deg);
+        }
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        25% {
+          transform: translate(-2px, 2px);
+        }
+        75% {
+          transform: translate(2px, -2px);
+        }
+      }
+      /* --- CSS MỚI CHO NÚT BẤM ĐỀU NHAU --- */
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+      }
+
+      /* Responsive trên điện thoại */
+      @media (max-width: 768px) {
+        /* 1. Xếp dọc ô nhập ngày và nhóm nút */
+        .control-group {
+          flex-direction: column;
+          width: 100%;
+        }
+
+        /* 2. Ô nhập ngày full chiều rộng */
+        input[type="datetime-local"] {
+          width: 100%;
+          margin-bottom: 10px; /* Tạo khoảng cách với nút */
+        }
+
+        /* 3. Nhóm nút full chiều rộng */
+        .button-group {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        /* 4. QUAN TRỌNG: Chia đều 3 nút bằng nhau */
+        .button-group .btn {
+          flex: 1; /* Tự động giãn đều */
+          padding: 10px 0; /* Căn giữa text */
+          font-size: 0.9rem; /* Giảm nhẹ cỡ chữ nếu cần */
+          white-space: nowrap; /* Giữ chữ trên 1 dòng */
         }
       }
     </style>
@@ -381,10 +472,20 @@
       <div class="card-panel">
         <div class="control-group">
           <input type="datetime-local" id="target-date" />
-          <button id="start-btn" class="btn btn-primary">Bắt đầu</button>
-          <button id="stop-btn" class="btn btn-secondary">Dừng</button>
-          <button id="reset-btn" class="btn btn-danger">Reset</button>
+
+          <div class="control-buttons-wrapper d-flex gap-2">
+            <button id="start-btn" class="btn btn-primary flex-grow-1">
+              Bắt đầu
+            </button>
+            <button id="stop-btn" class="btn btn-secondary flex-grow-1">
+              Dừng
+            </button>
+            <button id="reset-btn" class="btn btn-danger flex-grow-1">
+              Reset
+            </button>
+          </div>
         </div>
+
         <div class="preset-buttons">
           <button class="btn btn-secondary btn-preset" data-hours="1">
             +1 Giờ
@@ -466,7 +567,9 @@
         </button>
       </div>
     </div>
-
+    <footer class="mt-5 py-3 text-center text-muted">
+      <small style="font-size: x-small">&copy; 2025 MUPCODER</small>
+    </footer>
     <script type="module" src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="../../theme-manager.js"></script>

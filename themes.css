@@ -50,7 +50,9 @@ body.theme-default {
   --card: #484b6ac6;
   --glass: #9394a5; /* Màu nền mặt đồng hồ */
 }
-
+body.theme-default .accordion-button {
+  color: #484b6a;
+}
 body.theme-default .navbar {
   background-color: #484b6a !important;
   border-bottom: 2px solid #9394a5;
@@ -108,7 +110,10 @@ body.theme-tet {
   --rubik-wait: #ff0055; /* Màu khi  đang giữ (Đỏ ) */
   --rubik-ready: #228620; /* Màu khi sẵn sàng (Xanh) */
   --rubik-idle: #6fbb50;
+  --accent-color: #6ebb50d3;
+  --text-color: #89251b;
 }
+
 body.theme-tet .btn-primary {
   background: #6ebb50d3;
   color: #fffefe;
@@ -223,9 +228,11 @@ body.theme-summer {
   color: #254a8e;
   --card: #3b8bc469 !important;
   --glass: #3b8bc4b7 !important;
-  --rubik-wait: #ff0055; /* Màu khi  đang giữ (Đỏ ) */
-  --rubik-ready: #00ff00; /* Màu khi sẵn sàng (Xanh) */
+  --rubik-wait: #fff6f6; /* Màu khi  đang giữ (Đỏ ) */
+  --rubik-ready: #00b400c2; /* Màu khi sẵn sàng (Xanh) */
   --rubik-idle: #3b8ac4;
+  --accent-color: #0d6aac;
+  --text-color: #092a68;
 }
 body.theme-summer .btn-primary {
   background: #3b8bc4b7;

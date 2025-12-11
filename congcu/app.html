@@ -14,8 +14,10 @@
     <script src="../kiemdangnhap.js"></script>
 
     <style>
-      /* --- CSS RESPONSIVE BỔ SUNG (Không đổi giao diện gốc) --- */
-
+      body {
+        min-height: 100vh;
+        padding-top: 0px;
+      }
       /* Căn giữa nội dung chào mừng theo chiều dọc */
       .slide {
         min-height: 60vh; /* Chiếm 60% chiều cao màn hình */
@@ -39,7 +41,7 @@
     </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
         <a class="navbar-brand" href="../index.html"><b>MUPCLOCK</b></a>
         <button
@@ -51,7 +53,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
+          <ul class="navbar-nav mx-auto">
             <li class="nav-item">
               <a class="nav-link" href="../index.html">Trang chủ</a>
             </li>
@@ -92,7 +94,9 @@
               <a class="nav-link" href="../taikhoan/account.html">Tài khoản</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="../lienhe/contact.html">Liên hệ</a>
+              <a class="nav-link active" href="../lienhe/contact.html"
+                >Liên hệ</a
+              >
             </li>
           </ul>
         </div>
@@ -111,7 +115,7 @@
     <footer
       class="mt-5 py-3 text-center text-muted fixed-bottom position-relative-sm"
     >
-      <small>&copy; 2025 MUPCODER</small>
+      <small style="font-size: x-small">&copy; 2025 MUPCODER</small>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

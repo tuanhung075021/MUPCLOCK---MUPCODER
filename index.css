@@ -25,3 +25,21 @@ body {
   backdrop-filter: blur(5px);
   margin-top: 80px;
 }
+/* Sửa body để dùng Flexbox dọc */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0; /* Đảm bảo không có margin thừa */
+}
+
+/* Phần container chính sẽ chiếm hết khoảng trống còn lại */
+.container.d-flex {
+  flex: 1; /* Quan trọng: Đẩy footer xuống dưới */
+}
+
+/* Footer */
+footer {
+  margin-top: auto; /* Đẩy footer xuống đáy nếu nội dung ngắn */
+  width: 100%;
+}
