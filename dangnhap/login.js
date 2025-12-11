@@ -1,4 +1,3 @@
-// Nhập công cụ từ file cấu hình chung
 import { db, ref, set, get, child } from "../firebase-config.js";
 
 // --- XỬ LÝ ẨN HIỆN FORM ---
@@ -51,7 +50,7 @@ document.getElementById("login-form").addEventListener("submit", (e) => {
         if (userData.password === inputPass) {
           localStorage.setItem("currentUser", inputUser);
           localStorage.setItem("lastActive", Date.now());
-          window.location.href = "../công cụ/app.html";
+          window.location.href = "../congcu/app.html";
         } else {
           alert("Sai mật khẩu!");
         }

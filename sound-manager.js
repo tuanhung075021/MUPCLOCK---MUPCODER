@@ -40,12 +40,9 @@ export function playAlarm() {
     }
     // Nếu file hiện tại nằm trong thư mục con cấp 1 (công cụ, tài khoản...)
     else if (
-      decodedPath.includes("/cong-cu/") ||
-      decodedPath.includes("/công cụ/") || // Bắt được tên có dấu
-      decodedPath.includes("/tai-khoan/") ||
-      decodedPath.includes("/tài khoản/") ||
-      decodedPath.includes("/cua-hang/") ||
-      decodedPath.includes("/cửa hàng/")
+      decodedPath.includes("/congcu/") ||
+      decodedPath.includes("/taikhoan/") ||
+      decodedPath.includes("/cuahang/")
     ) {
       soundPath = "../" + soundPath; // Lùi 1 cấp
     }
