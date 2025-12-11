@@ -2,13 +2,41 @@
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
-    <title>Công Cụ - MUPCLOCK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Công cụ - MUPCLOCK</title>
+
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+
     <link rel="stylesheet" href="../themes.css" />
     <script src="../kiemdangnhap.js"></script>
+
+    <style>
+      /* --- CSS RESPONSIVE BỔ SUNG (Không đổi giao diện gốc) --- */
+
+      /* Căn giữa nội dung chào mừng theo chiều dọc */
+      .slide {
+        min-height: 60vh; /* Chiếm 60% chiều cao màn hình */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Responsive cho chữ */
+      @media (max-width: 576px) {
+        h1 {
+          font-size: 1.8rem; /* Giảm cỡ chữ tiêu đề trên điện thoại */
+        }
+        .lead {
+          font-size: 1rem;
+        }
+        .navbar-brand {
+          font-size: 1.2rem;
+        }
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
@@ -70,23 +98,43 @@
         </div>
       </div>
     </nav>
+
     <div class="slide">
       <div class="container text-center">
-        <h1>Chào mừng <span id="user-display">...</span>!</h1>
+        <h1>
+          Chào mừng <span id="user-display" class="text-break">...</span>!
+        </h1>
         <p class="lead">Hãy chọn một công cụ từ menu để bắt đầu.</p>
       </div>
     </div>
-    <footer class="mt-5 py-3 text-center text-muted">
+
+    <footer
+      class="mt-5 py-3 text-center text-muted fixed-bottom position-relative-sm"
+    >
       <small>&copy; 2025 MUPCODER</small>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="../theme-manager.js"></script>
 
     <script>
-      // Hiển thị tên người dùng
-      document.getElementById("user-display").innerText =
-        localStorage.getItem("currentUser");
+      // Hiển thị tên người dùng (Có xử lý nếu chưa đăng nhập)
+      const user = localStorage.getItem("currentUser");
+      document.getElementById("user-display").innerText = user ? user : "Khách";
+
+      // Fix lỗi menu mobile không đóng khi click ra ngoài (Optional)
+      document.addEventListener("click", function (e) {
+        const nav = document.getElementById("navbarNav");
+        const btn = document.querySelector(".navbar-toggler");
+        if (
+          nav.classList.contains("show") &&
+          !nav.contains(e.target) &&
+          !btn.contains(e.target)
+        ) {
+          const bsCollapse = new bootstrap.Collapse(nav, { toggle: false });
+          bsCollapse.hide();
+        }
+      });
     </script>
   </body>
 </html>
