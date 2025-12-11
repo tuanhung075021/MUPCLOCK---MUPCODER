@@ -34,25 +34,27 @@ const THEMES = [
     image: "bien.png",
   },
   {
-    id: "theme-autumn",
-    name: "Autumn Day",
+    id: "theme-autumn-beta",
+    name: "Autumn Day - Coming Soon",
     price: 200,
     class: "bg-secondary text-white",
     image: "../assets/images/theme-autumn.png",
   },
   {
-    id: "theme-xmas",
-    name: "Christmas World",
+    id: "theme-xmas-beta",
+    name: "Christmas World - Coming Soon",
     price: 250,
     class: "bg-success text-white",
     image: "../assets/images/theme-xmas.png",
+    alt: "Đang Cập Nhật",
   },
   {
-    id: "theme-dark", // Sửa id theme-darl thành theme-dark cho chuẩn
-    name: "Dark Mode",
+    id: "theme-dark-beta", // Sửa id theme-darl thành theme-dark cho chuẩn
+    name: "Dark Mode - Coming Soon",
     price: 50,
     class: "bg-dark text-white",
     image: "../assets/images/theme-dark.png",
+    alt: "Đang Cập Nhật",
   },
 ];
 
