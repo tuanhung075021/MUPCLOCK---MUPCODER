@@ -33,7 +33,7 @@ function renderBio(info) {
   bioBox.innerHTML = `
         <div class="text-center mb-3">
             <p class="mb-0 fst-italic text-primary">
-                <strong>❝ ${info.bio || "Thành viên TimeMaster"} ❞</strong>
+                <strong>❝ ${info.bio || "..."} ❞</strong>
             </p>
         </div>
 
