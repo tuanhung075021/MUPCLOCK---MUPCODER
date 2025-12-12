@@ -1,5 +1,7 @@
-// 1. Import thư viện (Thêm 'remove' vào danh sách này)
+// 1. Import các thư viện cần thiết
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+// Import Database
 import {
   getDatabase,
   ref,
@@ -7,10 +9,19 @@ import {
   get,
   child,
   update,
-  remove, // <--- BỔ SUNG THÊM CÁI NÀY
+  remove,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-// 2. Cấu hình (Giữ nguyên của bạn)
+// --- QUAN TRỌNG: Import Authentication (Cái bạn đang thiếu) ---
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+// 2. Cấu hình Firebase của bạn
 const firebaseConfig = {
   apiKey: "AIzaSyCm2az1msLlIbfh2RC7zBl8tbsCR92Ysnc",
   authDomain: "mupclock-mupcoder.firebaseapp.com",
@@ -22,9 +33,25 @@ const firebaseConfig = {
   measurementId: "G-D6F0H85KDN",
 };
 
-// 3. Khởi động
+// 3. Khởi động Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const auth = getAuth(app); // <--- Khởi tạo Auth ở đây
 
-// 4. Xuất khẩu (Thêm 'remove' vào đây nữa để các file khác dùng được)
-export { db, ref, set, get, child, update, remove };
+// 4. Xuất khẩu ra để các file khác dùng (THÊM auth VÀO ĐÂY)
+export {
+  // Database
+  db,
+  ref,
+  set,
+  get,
+  child,
+  update,
+  remove,
+  // Auth (Quan trọng)
+  auth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+  signOut,
+};
