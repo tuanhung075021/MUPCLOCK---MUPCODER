@@ -103,12 +103,11 @@ document.getElementById("profile-form").addEventListener("submit", (e) => {
 
   update(userRef, updates)
     .then(() => {
-      alert("✅ Đã lưu thông tin thành công!");
       // Cập nhật giao diện ngay lập tức (không cần F5)
       renderBio(newInfo);
     })
     .catch((err) => {
-      alert("❌ Lỗi: " + err);
+      alert("Lỗi: " + err);
     });
 });
 
@@ -131,9 +130,9 @@ document.getElementById("file-input").addEventListener("change", function (e) {
     document.getElementById("user-avatar").src = base64String;
 
     // Lưu lên Firebase
-    update(userRef, { "/info/avatar": base64String })
-      .then(() => alert("Đã cập nhật ảnh đại diện!"))
-      .catch((err) => alert("Lỗi tải ảnh: " + err));
+    update(userRef, { "/info/avatar": base64String }).catch((err) =>
+      alert("Lỗi tải ảnh: " + err)
+    );
   };
   reader.readAsDataURL(file);
 });
